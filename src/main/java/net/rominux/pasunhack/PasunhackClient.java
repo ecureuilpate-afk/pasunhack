@@ -2,34 +2,58 @@ package net.rominux.pasunhack;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class PasunhackClient implements ClientModInitializer {
 
-    private static boolean wasF6Pressed = false;
+    private static boolean wasTogglePressed = false;
+    private static KeyBinding menuKeyBinding;
 
     @Override
     public void onInitializeClient() {
-        // Event Tick: Exécuté 20 fois par seconde (à chaque tick du jeu)
+        // Charge la configuration dès le départ
+        PasunhackConfig.load();
+
+        // Permettra au joueur de changer la touche "Menu" dans Echappe > Options > Contrôles
+        menuKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "Ouvrir le Menu Pasunhack",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_G,
+                "Catégorie Pasunhack"
+        ));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             
-            // Lecture directe de la touche F6 au niveau du système (100% fiable)
+            // 1. Ouvre le GUI si on appuie sur la touche du menu (G)
+            while (menuKeyBinding.wasPressed()) {
+                client.setScreen(PasunhackGui.buildScreen(client.currentScreen));
+            }
+            
+            // 2. Vérification direct niveau GLFW pour le toggle du mod
             if (client.getWindow() != null) {
                 long window = client.getWindow().getHandle();
-                boolean isF6Pressed = GLFW.glfwGetKey(window, GLFW.GLFW_KEY_F6) == GLFW.GLFW_PRESS;
+                int toggleKey = PasunhackConfig.getInstance().toggleKeyBinding;
+                
+                boolean isTogglePressed = false;
+                if (toggleKey != InputUtil.UNKNOWN_KEY.getCode()) {
+                    isTogglePressed = GLFW.glfwGetKey(window, toggleKey) == GLFW.GLFW_PRESS;
+                }
 
-                if (isF6Pressed && !wasF6Pressed) {
+                if (isTogglePressed && !wasTogglePressed) {
                     AutoMiner.toggle();
                     String status = AutoMiner.isEnabled() ? "§aActivé" : "§cDésactivé";
                     if (client.player != null) {
                         client.player.sendMessage(Text.literal("AutoMiner: " + status), true);
                     }
                 }
-                wasF6Pressed = isF6Pressed;
+                wasTogglePressed = isTogglePressed;
             }
 
-            // Appel de la logique principale de l'Auto-Miner
+            // 3. Appel à la logique du minage
             AutoMiner.tick(client);
         });
     }

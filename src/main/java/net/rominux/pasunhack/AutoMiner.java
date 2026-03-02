@@ -1,13 +1,15 @@
 package net.rominux.pasunhack;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +19,8 @@ public class AutoMiner {
     private static BlockPos currentTarget = null;
     private static long miningStartTime = 0;
     private static Vec3d lastPlayerPos = null;
+    private static int aimWaitTicks = 0;
 
-    // Listes gérées dynamiquement par ta GUI
-    public static final Set<Block> WHITELIST = new HashSet<>(Set.of(Blocks.DIORITE, Blocks.DIAMOND_ORE));
     public static final Set<BlockPos> BLACKLIST_TEMP = new HashSet<>();
 
     public static boolean isEnabled() {
@@ -37,10 +38,9 @@ public class AutoMiner {
         if (!enabled || client.player == null || client.world == null)
             return;
 
-        // Solution de contournement universelle pour remplacer client.player.getPos()
         Vec3d currentPos = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ());
 
-        // Failsafe 1 : Désactivation si le joueur se déplace (clavier/chute)
+        // Failsafe 1 : Désactivation auto si on se déplace (chute, marche)
         if (lastPlayerPos != null && currentPos.squaredDistanceTo(lastPlayerPos) > 0.005) {
             enabled = false;
             client.player.sendMessage(Text.literal("§cAutoMiner en pause (Mouvement)"), true);
@@ -49,18 +49,15 @@ public class AutoMiner {
         }
         lastPlayerPos = currentPos;
 
-        // Failsafe 2 : Timeout de 5 secondes sur un bloc buggé ou inatteignable
+        // Failsafe 2 : Timeout si on reste bloqué trop longtemps sur l'activation d'un bloc testé
         if (currentTarget != null && miningStartTime > 0 && (System.currentTimeMillis() - miningStartTime) > 5000) {
             BLACKLIST_TEMP.add(currentTarget);
             cancelMining(client);
         }
 
-        // Si on ne mine rien, on cherche une nouvelle cible
         if (currentTarget == null) {
             findAndAimBestTarget(client);
-        }
-        // Si on a une cible et qu'on la regarde (validée par le raycast), on mine
-        else {
+        } else {
             mineAndValidateTarget(client);
         }
     }
@@ -68,17 +65,17 @@ public class AutoMiner {
     private static void findAndAimBestTarget(MinecraftClient client) {
         BlockPos bestTarget = null;
         double minAngleDist = Double.MAX_VALUE;
-        int r = 5; // Pour couvrir un rayon sphérique de 4.5
+        int r = 5; 
         BlockPos playerPos = client.player.getBlockPos();
         Vec3d currentPos = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ());
+        
+        Set<Block> whitelist = getWhitelistedBlocks();
 
-        // Scanne la zone en 3D
         for (int x = -r; x <= r; x++) {
             for (int y = -r; y <= r; y++) {
                 for (int z = -r; z <= r; z++) {
                     BlockPos pos = playerPos.add(x, y, z);
 
-                    // Vérification de la distance maximale absolue (4.5)
                     if (pos.toCenterPos().squaredDistanceTo(currentPos) > 4.5 * 4.5)
                         continue;
                     if (BLACKLIST_TEMP.contains(pos))
@@ -86,19 +83,13 @@ public class AutoMiner {
 
                     Block block = client.world.getBlockState(pos).getBlock();
 
-                    // Si le bloc est dans notre liste configurée dans la GUI
-                    if (WHITELIST.contains(block)) {
-                        // Récupère le centre de la hitbox du bloc (souvent de taille 1x1x1)
+                    if (whitelist.contains(block)) {
                         Vec3d targetCenter = Vec3d.ofCenter(pos);
-
-                        // Calcule l'angle requis depuis l'œil du joueur vers le bloc
                         Vec2f targetAngle = getYawPitch(client.player.getEyePos(), targetCenter);
-
-                        // Évalue à quel point le bloc est proche de notre réticule
                         double angleDist = getAngleDistance(client.player.getYaw(), client.player.getPitch(),
                                 targetAngle.x, targetAngle.y);
 
-                        // On garde celui qui nécessite le moins de mouvement de caméra
+                        // On trouve la cible demandant le minimum d'effort de rotation
                         if (angleDist < minAngleDist) {
                             minAngleDist = angleDist;
                             bestTarget = pos;
@@ -108,23 +99,36 @@ public class AutoMiner {
             }
         }
 
-        // Si un candidat potentiel a été trouvé
         if (bestTarget != null) {
             Vec3d targetCenter = Vec3d.ofCenter(bestTarget);
             Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
 
-            // Applique la rotation - (côté client). Cela déclenche la rotation de la tête
             client.player.setYaw(angle.x);
             client.player.setPitch(angle.y);
 
             currentTarget = bestTarget;
+            aimWaitTicks = 0; // Réinitialise les Ticks d'attente pour le Raycast
         }
     }
 
     private static void mineAndValidateTarget(MinecraftClient client) {
-        HitResult hit = client.player.raycast(4.5D, 1.0F, false);
+        // Attente de 5 ticks (0.25 sec) pour que le client ait le temps d'aligner le regard côté système
+        if (aimWaitTicks < 5) {
+            aimWaitTicks++;
+            // On s'assure de l'alignement sur les 5 ticks
+            if (currentTarget != null && client.player != null) {
+                Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
+                Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
+                client.player.setYaw(angle.x);
+                client.player.setPitch(angle.y);
+            }
+            return;
+        }
 
-        if (hit.getType() == HitResult.Type.BLOCK && ((BlockHitResult) hit).getBlockPos().equals(currentTarget)) {
+        // On vérifie directement le cube dans le viseur de Minecraft pour contourner les bugs des raycasts paramétrisés par tick partiel
+        HitResult hit = client.crosshairTarget;
+
+        if (hit != null && hit.getType() == HitResult.Type.BLOCK && ((BlockHitResult) hit).getBlockPos().equals(currentTarget)) {
             Direction side = ((BlockHitResult) hit).getSide();
 
             if (miningStartTime == 0) {
@@ -139,6 +143,14 @@ public class AutoMiner {
             if (client.world.getBlockState(currentTarget).isAir()) {
                 cancelMining(client);
             }
+            
+            // on maintient le viseur droit pour ne pas "glisser" pendant le minage
+            if (currentTarget != null && client.player != null) {
+                Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
+                Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
+                client.player.setYaw(angle.x);
+                client.player.setPitch(angle.y);
+            }
         } else {
             BLACKLIST_TEMP.add(currentTarget);
             cancelMining(client);
@@ -151,9 +163,24 @@ public class AutoMiner {
         }
         currentTarget = null;
         miningStartTime = 0;
+        aimWaitTicks = 0;
     }
 
-    // --- MATHS UTILS --- //
+    // Récupère dynamiquement les blocks depuis la configuration (GUI)
+    private static Set<Block> getWhitelistedBlocks() {
+        Set<Block> blocks = new HashSet<>();
+        for (String id : PasunhackConfig.getInstance().blocksToMine) {
+            try {
+                Identifier identifier = Identifier.of(id);
+                if (identifier != null && Registries.BLOCK.containsId(identifier)) {
+                    blocks.add(Registries.BLOCK.get(identifier));
+                }
+            } catch (Throwable t) {
+                // Ignore silentieusement si l'ID est invalide
+            }
+        }
+        return blocks;
+    }
 
     public static Vec2f getYawPitch(Vec3d eyePos, Vec3d target) {
         double dx = target.x - eyePos.x;
