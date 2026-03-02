@@ -10,6 +10,8 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import java.util.HashSet;
 import java.util.Set;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 public class AutoMiner {
 
@@ -18,8 +20,17 @@ public class AutoMiner {
     private static long miningStartTime = 0;
     private static Vec3d lastPlayerPos = null;
 
-    // Listes gérées dynamiquement par ta GUI
-    public static final Set<Block> WHITELIST = new HashSet<>(Set.of(Blocks.DIORITE, Blocks.DIAMOND_ORE));
+    public static Set<Block> getWhitelist() {
+        Set<Block> blocks = new HashSet<>();
+        for (String idStr : PasunhackConfig.get().whitelistedBlocks) {
+            Identifier id = Identifier.tryParse(idStr);
+            if (id != null) {
+                blocks.add(Registries.BLOCK.get(id));
+            }
+        }
+        return blocks;
+    }
+
     public static final Set<BlockPos> BLACKLIST_TEMP = new HashSet<>();
 
     public static boolean isEnabled() {
@@ -83,7 +94,7 @@ public class AutoMiner {
                     Block block = client.world.getBlockState(pos).getBlock();
 
                     // Si le bloc est dans notre liste configurée dans la GUI
-                    if (WHITELIST.contains(block)) {
+                    if (getWhitelist().contains(block)) {
                         // Récupère le centre de la hitbox du bloc (souvent de taille 1x1x1)
                         Vec3d targetCenter = Vec3d.ofCenter(pos);
 
