@@ -49,7 +49,8 @@ public class AutoMiner {
         }
         lastPlayerPos = currentPos;
 
-        // Failsafe 2 : Timeout si on reste bloqué trop longtemps sur l'activation d'un bloc testé
+        // Failsafe 2 : Timeout si on reste bloqué trop longtemps sur l'activation d'un
+        // bloc testé
         if (currentTarget != null && miningStartTime > 0 && (System.currentTimeMillis() - miningStartTime) > 5000) {
             BLACKLIST_TEMP.add(currentTarget);
             cancelMining(client);
@@ -65,10 +66,10 @@ public class AutoMiner {
     private static void findAndAimBestTarget(MinecraftClient client) {
         BlockPos bestTarget = null;
         double minAngleDist = Double.MAX_VALUE;
-        int r = 5; 
+        int r = 5;
         BlockPos playerPos = client.player.getBlockPos();
         Vec3d currentPos = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ());
-        
+
         Set<Block> whitelist = getWhitelistedBlocks();
 
         for (int x = -r; x <= r; x++) {
@@ -112,23 +113,28 @@ public class AutoMiner {
     }
 
     private static void mineAndValidateTarget(MinecraftClient client) {
-        // Attente de 5 ticks (0.25 sec) pour que le client ait le temps d'aligner le regard côté système
-        if (aimWaitTicks < 5) {
-            aimWaitTicks++;
-            // On s'assure de l'alignement sur les 5 ticks
-            if (currentTarget != null && client.player != null) {
-                Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
-                Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
-                client.player.setYaw(angle.x);
-                client.player.setPitch(angle.y);
-            }
+        // Maintien actif de l'alignement de la caméra vers le bloc
+        if (currentTarget != null && client.player != null) {
+            Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
+            Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
+            client.player.setYaw(angle.x);
+            client.player.setPitch(angle.y);
+        }
+
+        // Vérification immédiate que le bloc est toujours le bon (au cas où il est
+        // subitement détruit par qqn d'autre ou remplacé)
+        if (!getWhitelistedBlocks().contains(client.world.getBlockState(currentTarget).getBlock())) {
+            cancelMining(client);
             return;
         }
 
-        // On vérifie directement le cube dans le viseur de Minecraft pour contourner les bugs des raycasts paramétrisés par tick partiel
+        // Utilisation du crosshair pour valider la ligne de vue exacte
         HitResult hit = client.crosshairTarget;
 
-        if (hit != null && hit.getType() == HitResult.Type.BLOCK && ((BlockHitResult) hit).getBlockPos().equals(currentTarget)) {
+        if (hit != null && hit.getType() == HitResult.Type.BLOCK
+                && ((BlockHitResult) hit).getBlockPos().equals(currentTarget)) {
+            // Le Raycast a réussi, on réinitialise nos "chances" d'alignement
+            aimWaitTicks = 0;
             Direction side = ((BlockHitResult) hit).getSide();
 
             if (miningStartTime == 0) {
@@ -139,21 +145,14 @@ public class AutoMiner {
                 client.interactionManager.updateBlockBreakingProgress(currentTarget, side);
                 client.player.swingHand(Hand.MAIN_HAND);
             }
-
-            if (client.world.getBlockState(currentTarget).isAir()) {
+        } else {
+            // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
+            // tolérance (5 ticks max)
+            aimWaitTicks++;
+            if (aimWaitTicks > 5) {
+                BLACKLIST_TEMP.add(currentTarget);
                 cancelMining(client);
             }
-            
-            // on maintient le viseur droit pour ne pas "glisser" pendant le minage
-            if (currentTarget != null && client.player != null) {
-                Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
-                Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
-                client.player.setYaw(angle.x);
-                client.player.setPitch(angle.y);
-            }
-        } else {
-            BLACKLIST_TEMP.add(currentTarget);
-            cancelMining(client);
         }
     }
 
