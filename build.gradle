@@ -10,10 +10,6 @@ base {
 	archivesName = project.archives_base_name
 }
 
-	repositories {
-		maven { url "https://maven.shedaniel.me/" }
-		maven { url "https://maven.terraformersmc.com/" }
-	}
 
 fabricApi {
 	configureDataGeneration {
@@ -29,15 +25,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	
-	// Configuration GUI
-	modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.130") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	
-	// Intégration pour voir le mod dans le menu Echap et "Mods"
 }
-
 processResources {
 	inputs.property "version", project.version
 

@@ -18,26 +18,25 @@ public class PasunhackClient implements ClientModInitializer {
         // Charge la configuration dès le départ
         PasunhackConfig.load();
 
-        // Permettra au joueur de changer la touche "Menu" dans Echappe > Options > Contrôles
+        // Utilisation de la catégorie officielle MISC (Divers) pour éviter l'erreur
         menuKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "Ouvrir le Menu Pasunhack",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_G,
-                "Catégorie Pasunhack"
-        ));
+                KeyBinding.Category.MISC));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            
+
             // 1. Ouvre le GUI si on appuie sur la touche du menu (G)
             while (menuKeyBinding.wasPressed()) {
-                client.setScreen(PasunhackGui.buildScreen(client.currentScreen));
+                client.setScreen(new PasunhackGui(client.currentScreen));
             }
-            
+
             // 2. Vérification direct niveau GLFW pour le toggle du mod
             if (client.getWindow() != null) {
                 long window = client.getWindow().getHandle();
                 int toggleKey = PasunhackConfig.getInstance().toggleKeyBinding;
-                
+
                 boolean isTogglePressed = false;
                 if (toggleKey != InputUtil.UNKNOWN_KEY.getCode()) {
                     isTogglePressed = GLFW.glfwGetKey(window, toggleKey) == GLFW.GLFW_PRESS;

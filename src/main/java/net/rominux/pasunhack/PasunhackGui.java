@@ -1,40 +1,117 @@
 package net.rominux.pasunhack;
 
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 
-public class PasunhackGui {
+public class PasunhackGui extends Screen {
 
-    public static Screen buildScreen(Screen parent) {
-        ConfigBuilder builder = ConfigBuilder.create()
-                .setParentScreen(parent)
-                .setTitle(Text.literal("Configuration Pasunhack"));
+        private final Screen parent;
+        private final PasunhackConfig config;
 
-        // Définit l'action à réaliser quand on clique sur "Save & Quit"
-        builder.setSavingRunnable(PasunhackConfig::save);
+        private TextFieldWidget blockInputField;
+        private ButtonWidget toggleKeyButton;
 
-        ConfigCategory general = builder.getOrCreateCategory(Text.literal("Général"));
-        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+        private boolean isListeningForKey = false;
 
-        PasunhackConfig config = PasunhackConfig.getInstance();
+        public PasunhackGui(Screen parent) {
+                super(Text.literal("Configuration Pasunhack"));
+                this.parent = parent;
+                this.config = PasunhackConfig.getInstance();
+        }
 
-        // Ajout de la liste de blocs à miner
-        general.addEntry(entryBuilder.startStrList(Text.literal("Blocs à miner"), config.blocksToMine)
-                .setDefaultValue(java.util.Arrays.asList("minecraft:diamond_ore", "minecraft:deepslate_diamond_ore", "minecraft:ancient_debris"))
-                .setTooltip(Text.literal("Liste des IDs des blocs (ex: minecraft:diamond_ore)"))
-                .setSaveConsumer(newValue -> config.blocksToMine = newValue)
-                .build());
+        @Override
+        protected void init() {
+                int centerX = this.width / 2;
+                int centerY = this.height / 2;
 
-        // Ajout du champ pour la touche de bascule
-        general.addEntry(entryBuilder.startKeyCodeField(Text.literal("Touche Toggle AutoMiner"), InputUtil.Type.KEYSYM.createFromCode(config.toggleKeyBinding))
-                .setDefaultValue(InputUtil.Type.KEYSYM.createFromCode(org.lwjgl.glfw.GLFW.GLFW_KEY_F6))
-                .setSaveConsumer(newValue -> config.toggleKeyBinding = newValue.getCode())
-                .build());
+                this.clearChildren();
 
-        return builder.build();
-    }
+                // Toggle Keybind Button
+                this.toggleKeyButton = ButtonWidget.builder(getKeybindText(), button -> {
+                        this.isListeningForKey = true;
+                        button.setMessage(Text.literal("> Appuyez sur une touche <"));
+                }).dimensions(centerX - 100, 40, 200, 20).build();
+                this.addDrawableChild(this.toggleKeyButton);
+
+                // Block Input Field
+                this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 140, 20,
+                                Text.literal("ID du bloc"));
+                this.blockInputField.setMaxLength(100);
+                this.addDrawableChild(this.blockInputField);
+
+                // Add Block Button
+                ButtonWidget addBlockButton = ButtonWidget.builder(Text.literal("Ajouter"), button -> {
+                        String blockId = this.blockInputField.getText();
+                        if (!blockId.isEmpty() && !this.config.blocksToMine.contains(blockId)) {
+                                this.config.blocksToMine.add(blockId);
+                                this.blockInputField.setText("");
+                                this.init(); // Refresh UI to show the new block
+                        }
+                }).dimensions(centerX + 45, 80, 55, 20).build();
+                this.addDrawableChild(addBlockButton);
+
+                // List of blocks to remove
+                int listY = 110;
+                int index = 0;
+                for (String block : this.config.blocksToMine) {
+                        final String b = block;
+                        ButtonWidget removeBtn = ButtonWidget.builder(Text.literal("§c[X] §r" + block), button -> {
+                                this.config.blocksToMine.remove(b);
+                                this.init(); // Refresh UI
+                        }).dimensions(centerX - 100, listY + (index * 24), 200, 20).build();
+                        this.addDrawableChild(removeBtn);
+                        index++;
+                }
+
+                // Save & Quit
+                ButtonWidget saveAndQuit = ButtonWidget.builder(Text.literal("Sauvegarder et Quitter"), button -> {
+                        PasunhackConfig.save();
+                        this.client.setScreen(this.parent);
+                }).dimensions(centerX - 100, this.height - 30, 200, 20).build();
+                this.addDrawableChild(saveAndQuit);
+        }
+
+        @Override
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+                super.renderBackground(context, mouseX, mouseY, delta);
+                context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
+                super.render(context, mouseX, mouseY, delta);
+        }
+
+        @Override
+        public boolean keyPressed(KeyInput input) {
+                if (this.isListeningForKey) {
+                        if (input.key() == GLFW.GLFW_KEY_ESCAPE) {
+                                this.config.toggleKeyBinding = InputUtil.UNKNOWN_KEY.getCode();
+                        } else {
+                                this.config.toggleKeyBinding = input.key();
+                        }
+                        this.isListeningForKey = false;
+                        this.toggleKeyButton.setMessage(getKeybindText());
+                        PasunhackConfig.save();
+                        return true;
+                }
+                return super.keyPressed(input);
+        }
+
+        private Text getKeybindText() {
+                if (this.config.toggleKeyBinding == InputUtil.UNKNOWN_KEY.getCode()) {
+                        return Text.literal("Touche d'activation: AUCUNE");
+                }
+                String keyName = InputUtil.Type.KEYSYM.createFromCode(this.config.toggleKeyBinding).getLocalizedText()
+                                .getString();
+                return Text.literal("Touche d'activation: " + keyName);
+        }
+
+        @Override
+        public void close() {
+                PasunhackConfig.save();
+                this.client.setScreen(this.parent);
+        }
 }
