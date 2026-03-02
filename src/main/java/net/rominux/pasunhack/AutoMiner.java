@@ -147,9 +147,9 @@ public class AutoMiner {
             }
         } else {
             // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
-            // tolérance (5 ticks max)
+            // tolérance (20 ticks max = 1s)
             aimWaitTicks++;
-            if (aimWaitTicks > 5) {
+            if (aimWaitTicks > 20) {
                 BLACKLIST_TEMP.add(currentTarget);
                 cancelMining(client);
             }
