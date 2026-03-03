@@ -44,28 +44,28 @@ public class CommissionsOverlay implements HudRenderCallback {
             sortedList.sort((a, b) -> a.getProfile().name().compareToIgnoreCase(b.getProfile().name()));
 
             boolean foundCommissions = false;
-            int linesToRead = 0;
+            java.util.regex.Pattern COMM_PATTERN = java.util.regex.Pattern.compile("(?<name>.*): (?<progress>.*)%?");
 
             for (PlayerListEntry entry : sortedList) {
                 if (entry.getDisplayName() == null)
                     continue;
 
-                String cleanLine = entry.getDisplayName().getString().replaceAll("§[0-9a-fk-or]", "").trim();
-                if (cleanLine.isEmpty())
-                    continue;
+                String string = entry.getDisplayName().getString();
 
                 if (foundCommissions) {
-                    if (linesToRead <= 0)
-                        break;
-                    if (cleanLine.contains("www.hypixel.net") || cleanLine.contains("XP")
-                            || cleanLine.contains("Profile"))
+                    if (!string.startsWith(" "))
                         break;
 
-                    commissionLines.add(cleanLine);
-                    linesToRead--;
-                } else if (cleanLine.contains("Commissions")) {
+                    string = string.substring(1);
+                    java.util.regex.Matcher matcher = COMM_PATTERN.matcher(string);
+                    if (matcher.matches()) {
+                        String name = matcher.group("name");
+                        String progress = matcher.group("progress");
+                        String displayLine = name + ": " + progress + (progress.equals("DONE") ? "" : "%");
+                        commissionLines.add(displayLine);
+                    }
+                } else if (string.startsWith("Commissions")) {
                     foundCommissions = true;
-                    linesToRead = 4;
                 }
             }
 
