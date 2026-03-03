@@ -35,7 +35,20 @@ public class CommissionsOverlay implements HudRenderCallback {
         if (client.player == null || client.player.networkHandler == null)
             return;
 
-        Collection<PlayerListEntry> playerList = client.player.networkHandler.getPlayerList();
+        List<PlayerListEntry> playerList = new ArrayList<>(client.player.networkHandler.getPlayerList());
+        playerList.sort((a, b) -> {
+            net.minecraft.scoreboard.Team teamA = a.getScoreboardTeam();
+            net.minecraft.scoreboard.Team teamB = b.getScoreboardTeam();
+            int result = Boolean.compare(a.getGameMode() == net.minecraft.world.GameMode.SPECTATOR,
+                    b.getGameMode() == net.minecraft.world.GameMode.SPECTATOR);
+            if (result != 0)
+                return result;
+            result = (teamA != null ? teamA.getName() : "").compareTo(teamB != null ? teamB.getName() : "");
+            if (result != 0)
+                return result;
+            return a.getProfile().name().compareToIgnoreCase(b.getProfile().name());
+        });
+
         List<String> commissionLines = new ArrayList<>();
         boolean foundCommissions = false;
         int linesToRead = 0;
