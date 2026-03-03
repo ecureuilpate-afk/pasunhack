@@ -50,14 +50,19 @@ public class PickobulusRender {
 
         if (showWaypoints) {
             net.minecraft.client.font.TextRenderer textRenderer = client.textRenderer;
-            float scale = 0.025f;
             net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
                     .getEntityVertexConsumers();
 
             for (CommissionsOverlay.CommissionWaypoint wp : CommissionsOverlay.waypoints) {
+                // Draw Pillar (Beacon Beam)
                 Box box = new Box(wp.x - 0.5, wp.y, wp.z - 0.5, wp.x + 0.5, wp.y + 100, wp.z + 0.5)
                         .offset(-camPos.x, -camPos.y, -camPos.z);
+
                 drawBox(context.matrices(), lineConsumer, box, 1.0f, 0.5f, 0.0f, 0.8f);
+
+                double dist = Math.sqrt((wp.x - camPos.x) * (wp.x - camPos.x) + (wp.y - camPos.y) * (wp.y - camPos.y)
+                        + (wp.z - camPos.z) * (wp.z - camPos.z));
+                float scale = (float) Math.max(0.025, dist * 0.0035);
 
                 context.matrices().push();
                 context.matrices().translate(wp.x + 0.0 - camPos.x, wp.y + 2.0 - camPos.y, wp.z + 0.0 - camPos.z);
@@ -69,7 +74,7 @@ public class PickobulusRender {
                 org.joml.Matrix4f posMat = context.matrices().peek().getPositionMatrix();
 
                 textRenderer.draw(
-                        net.minecraft.text.Text.literal(text),
+                        text,
                         textWidth,
                         0f,
                         0xFFAA00,
