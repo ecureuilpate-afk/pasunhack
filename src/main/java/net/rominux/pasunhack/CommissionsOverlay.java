@@ -97,25 +97,27 @@ public class CommissionsOverlay implements HudRenderCallback {
                     if (PasunhackConfig.getInstance().showCommissionWaypoints) {
                         String lowerLine = line.toLowerCase();
                         if (lowerLine.contains("upper mines")) {
-                            waypoints.add(new CommissionWaypoint("Upper Mines", 0, 100, -50));
+                            waypoints.add(new CommissionWaypoint("Upper Mines", -130, 174, -50));
                         } else if (lowerLine.contains("royal mines")) {
-                            waypoints.add(new CommissionWaypoint("Royal Mines", 160, 140, 20));
+                            waypoints.add(new CommissionWaypoint("Royal Mines", 130, 154, 30));
                         } else if (lowerLine.contains("lava springs")) {
-                            waypoints.add(new CommissionWaypoint("Lava Springs", 60, 200, 20));
-                        } else if (lowerLine.contains("rampart's quarry")) {
-                            waypoints.add(new CommissionWaypoint("Rampart's Quarry", -100, 140, 0));
+                            waypoints.add(new CommissionWaypoint("Lava Springs", 60, 197, -15));
+                        } else if (lowerLine.contains("rampart's quarry") || lowerLine.contains("ramparts quarry")) {
+                            waypoints.add(new CommissionWaypoint("Rampart's Quarry", -100, 150, -20));
                         } else if (lowerLine.contains("cliffside veins")) {
-                            waypoints.add(new CommissionWaypoint("Cliffside Veins", 10, 130, 40));
-                        } else if (lowerLine.contains("forge basin")) {
-                            waypoints.add(new CommissionWaypoint("Forge Basin", 0, 170, -40));
-                        } else if (lowerLine.contains("dwarven village")) {
-                            waypoints.add(new CommissionWaypoint("Dwarven Village", 0, 200, 100));
-                        } else if (lowerLine.contains("goblin burrows")) {
-                            waypoints.add(new CommissionWaypoint("Goblin Burrows", -40, 140, 140));
-                        } else if (lowerLine.contains("goblin slayer")) {
-                            waypoints.add(new CommissionWaypoint("Goblin Slayer", -40, 140, 140));
-                        } else if (lowerLine.contains("ice walker") || lowerLine.contains("great ice wall")) {
-                            waypoints.add(new CommissionWaypoint("Ice Walker", 0, 130, 150));
+                            waypoints.add(new CommissionWaypoint("Cliffside Veins", 40, 128, 40));
+                        } else if (lowerLine.contains("glacite walker")) {
+                            waypoints.add(new CommissionWaypoint("Glacite Walker", 0, 128, 150));
+                        } else if (lowerLine.contains("aquamarine")) {
+                            waypoints.add(new CommissionWaypoint("Aquamarine", 20, 136, 370));
+                        } else if (lowerLine.contains("onyx")) {
+                            waypoints.add(new CommissionWaypoint("Onyx", 4, 127, 307));
+                        } else if (lowerLine.contains("peridot")) {
+                            waypoints.add(new CommissionWaypoint("Peridot", 66, 144, 284));
+                        } else if (lowerLine.contains("citrine")) {
+                            waypoints.add(new CommissionWaypoint("Citrine", -86, 143, 261));
+                        } else if (lowerLine.contains("base camp")) {
+                            waypoints.add(new CommissionWaypoint("Base Camp", -7, 126, 229));
                         }
                     }
                 }
