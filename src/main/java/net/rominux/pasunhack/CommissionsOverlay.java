@@ -62,7 +62,12 @@ public class CommissionsOverlay implements HudRenderCallback {
                 if (foundCommissions) {
                     if (string.isEmpty() || string.startsWith("Skills") || string.startsWith("Events")
                             || string.startsWith("Dungeons")) {
-                        break; // Stop parsing when we hit the next category
+                        // Stop parsing if we hit an explicit new category
+                        if (string.startsWith("Skills") || string.startsWith("Events")
+                                || string.startsWith("Dungeons")) {
+                            break;
+                        }
+                        continue;
                     }
 
                     if (string.contains(":")) {
@@ -71,7 +76,7 @@ public class CommissionsOverlay implements HudRenderCallback {
                         String progress = parts[1].trim();
 
                         // Prevent adding DONE commissions or duplicate entries for display
-                        if (!progress.equalsIgnoreCase("DONE")) {
+                        if (!progress.equalsIgnoreCase("DONE") && !progress.isEmpty()) {
                             String displayLine = name + ": " + progress;
                             commissionLines.add(displayLine);
                         }
