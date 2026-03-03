@@ -17,6 +17,7 @@ public class ParticleManagerMixin {
         if (!PasunhackConfig.getInstance().autoPrecisionMiner || AutoMiner.currentTarget == null)
             return;
 
+        double dist = particle.getBoundingBox().getCenter().squaredDistanceTo(AutoMiner.currentTarget.toCenterPos());
         if (dist < 1.5 * 1.5) {
             net.minecraft.util.math.Vec3d newCenter = particle.getBoundingBox().getCenter();
             if (AutoMiner.precisionTarget == null || AutoMiner.precisionTarget.distanceTo(newCenter) > 0.5) {

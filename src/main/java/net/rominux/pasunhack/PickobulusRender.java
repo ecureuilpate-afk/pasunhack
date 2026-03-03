@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +31,7 @@ public class PickobulusRender {
         VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 
         Item item = client.player.getMainHandStack().getItem();
-        if (showPickobulus && (item instanceof PickaxeItem || item == Items.PRISMARINE_SHARD)) {
+        if (showPickobulus && (item.toString().contains("pickaxe") || item == Items.PRISMARINE_SHARD)) {
             HitResult hit = client.crosshairTarget;
             if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = ((BlockHitResult) hit).getBlockPos();
