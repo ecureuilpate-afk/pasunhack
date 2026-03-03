@@ -98,6 +98,14 @@ public class PasunhackGui extends Screen {
                                                 })
                                 .dimensions(rX, 115, 130, 20).build());
 
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Dump TabList -> Logs"),
+                                                btn -> {
+                                                        dumpTablistLogs();
+                                                        btn.setMessage(Text.literal("Dumped !"));
+                                                })
+                                .dimensions(rX, 140, 130, 20).build());
+
                 // Block Input Field
                 this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,
                                 Text.literal("Chercher un bloc..."));
@@ -243,6 +251,82 @@ public class PasunhackGui extends Screen {
                                 this.searchResults.add(new SearchResult(block, btn));
                                 btnY += 24;
                         }
+                }
+        }
+
+        private void dumpTablistLogs() {
+                if (this.client == null || this.client.player == null)
+                        return;
+
+                String basePath = "C:\\Users\\Omain\\Desktop\\meincrac\\";
+
+                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log1.txt")) {
+                        writer.write("--- LOG 1 : PlayerListNetwork ---\n");
+                        for (net.minecraft.client.network.PlayerListEntry entry : this.client.player.networkHandler
+                                        .getPlayerList()) {
+                                String name = entry.getProfile() != null ? entry.getProfile().name() : "null";
+                                net.minecraft.text.Text displayNameObj = entry.getDisplayName();
+                                String displayName = displayNameObj != null ? displayNameObj.getString() : "null";
+
+                                net.minecraft.scoreboard.Team team = entry.getScoreboardTeam();
+                                String teamName = team != null ? team.getName() : "null";
+                                String prefix = team != null ? team.getPrefix().getString() : "";
+                                String suffix = team != null ? team.getSuffix().getString() : "";
+
+                                writer.write("ProfileName: " + name + " | DisplayName: " + displayName + " | TeamName: "
+                                                + teamName + " | Prefix: " + prefix + " | Suffix: " + suffix + "\n");
+                        }
+                } catch (Exception e) {
+                }
+
+                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log2.txt")) {
+                        writer.write("--- LOG 2 : Scoreboard Teams ---\n");
+                        net.minecraft.scoreboard.Scoreboard scoreboard = this.client.world.getScoreboard();
+                        if (scoreboard != null) {
+                                for (net.minecraft.scoreboard.Team team : scoreboard.getTeams()) {
+                                        String prefix = team.getPrefix().getString();
+                                        String suffix = team.getSuffix().getString();
+                                        writer.write("Team: " + team.getName() + " | Prefix: " + prefix + " | Suffix: "
+                                                        + suffix + " | Assigned Players: " + team.getPlayerList()
+                                                        + "\n");
+                                }
+                        }
+                } catch (Exception e) {
+                }
+
+                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log3.txt")) {
+                        writer.write("--- LOG 3 : Scoreboard Sidebar Objectives & All Objectives ---\n");
+                        net.minecraft.scoreboard.Scoreboard scoreboard = this.client.world.getScoreboard();
+                        if (scoreboard != null) {
+                                net.minecraft.scoreboard.ScoreboardObjective objective = scoreboard.getObjectiveForSlot(
+                                                net.minecraft.scoreboard.ScoreboardDisplaySlot.SIDEBAR);
+                                if (objective != null) {
+                                        writer.write("Sidebar Objective: " + objective.getName() + "\n");
+                                        for (net.minecraft.scoreboard.ScoreboardEntry entry : scoreboard
+                                                        .getScoreboardEntries(objective)) {
+                                                String owner = entry.owner();
+                                                net.minecraft.scoreboard.Team team = scoreboard
+                                                                .getScoreHolderTeam(owner);
+                                                String prefix = team != null ? team.getPrefix().getString() : "";
+                                                String suffix = team != null ? team.getSuffix().getString() : "";
+                                                writer.write("  Owner: " + owner + " | Score=" + entry.value()
+                                                                + " | Prefix=" + prefix + " | Suffix=" + suffix + "\n");
+                                        }
+                                } else {
+                                        writer.write("NO SIDEBAR OBJECTIVE FOUND\n");
+                                }
+
+                                writer.write("\n--- ALL OBJECTIVES ---\n");
+                                for (net.minecraft.scoreboard.ScoreboardObjective obj : scoreboard.getObjectives()) {
+                                        writer.write("Obj: " + obj.getName() + "\n");
+                                        for (net.minecraft.scoreboard.ScoreboardEntry entry : scoreboard
+                                                        .getScoreboardEntries(obj)) {
+                                                writer.write("  Owner: " + entry.owner() + " = " + entry.value()
+                                                                + "\n");
+                                        }
+                                }
+                        }
+                } catch (Exception e) {
                 }
         }
 }
