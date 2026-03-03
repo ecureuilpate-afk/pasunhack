@@ -32,8 +32,10 @@ public class AutoMiner {
 
     public static void toggle() {
         enabled = !enabled;
-        if (!enabled)
+        if (!enabled) {
             cancelMining(MinecraftClient.getInstance());
+            BLACKLIST_TEMP.clear();
+        }
         lastPlayerPos = null;
     }
 
@@ -91,12 +93,12 @@ public class AutoMiner {
                         Vec3d targetCenter = Vec3d.ofCenter(pos);
                         Vec3d[] pointsToTest = {
                                 targetCenter,
-                                targetCenter.add(0.49, 0, 0),
-                                targetCenter.add(-0.49, 0, 0),
-                                targetCenter.add(0, 0.49, 0),
-                                targetCenter.add(0, -0.49, 0),
-                                targetCenter.add(0, 0, 0.49),
-                                targetCenter.add(0, 0, -0.49)
+                                targetCenter.add(0.45, 0, 0),
+                                targetCenter.add(-0.45, 0, 0),
+                                targetCenter.add(0, 0.45, 0),
+                                targetCenter.add(0, -0.45, 0),
+                                targetCenter.add(0, 0, 0.45),
+                                targetCenter.add(0, 0, -0.45)
                         };
 
                         Vec3d validPoint = null;
@@ -104,7 +106,7 @@ public class AutoMiner {
                             BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
                                     client.player.getEyePos(),
                                     p,
-                                    RaycastContext.ShapeType.OUTLINE,
+                                    RaycastContext.ShapeType.COLLIDER,
                                     RaycastContext.FluidHandling.NONE,
                                     client.player));
 
@@ -239,11 +241,13 @@ public class AutoMiner {
             target = getYawPitch(client.player.getEyePos(), precisionTarget);
         }
 
-        float newYaw = MathHelper.lerpAngleDegrees(0.45f, currentYaw, target.x);
-        float newPitch = MathHelper.lerpAngleDegrees(0.45f, currentPitch, target.y);
+        if (getAngleDistance(currentYaw, currentPitch, target.x, target.y) >= 1.0) {
+            float newYaw = MathHelper.lerpAngleDegrees(0.45f, currentYaw, target.x);
+            float newPitch = MathHelper.lerpAngleDegrees(0.45f, currentPitch, target.y);
 
-        client.player.setYaw(newYaw);
-        client.player.setPitch(newPitch);
+            client.player.setYaw(newYaw);
+            client.player.setPitch(newPitch);
+        }
     }
 
     public static double getAngleDistance(float yaw1, float pitch1, float yaw2, float pitch2) {

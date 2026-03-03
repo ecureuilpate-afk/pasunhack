@@ -44,7 +44,7 @@ public class CommissionsOverlay implements HudRenderCallback {
             String text = entry.getDisplayName() != null ? entry.getDisplayName().getString()
                     : "Unknown";
 
-            String cleanText = text.replaceAll("(?i)§[0-9a-fk-or]", "").trim();
+            String cleanText = text.replaceAll("§.", "").replaceAll("[^a-zA-Z0-9 %:]", "").trim();
 
             if (foundCommissions) {
                 if (cleanText.isEmpty() || linesToRead <= 0) {
@@ -90,8 +90,10 @@ public class CommissionsOverlay implements HudRenderCallback {
                         waypoints.add(new CommissionWaypoint("Forge Basin", 0, 170, -40));
                     } else if (lowerLine.contains("dwarven village")) {
                         waypoints.add(new CommissionWaypoint("Dwarven Village", 0, 200, 100));
-                    } else if (lowerLine.contains("goblin burrows") || lowerLine.contains("goblin slayer")) {
-                        waypoints.add(new CommissionWaypoint("Goblin", -40, 140, 140));
+                    } else if (lowerLine.contains("goblin burrows")) {
+                        waypoints.add(new CommissionWaypoint("Goblin Burrows", -40, 140, 140));
+                    } else if (lowerLine.contains("goblin slayer")) {
+                        waypoints.add(new CommissionWaypoint("Goblin Slayer", -40, 140, 140));
                     } else if (lowerLine.contains("ice walker") || lowerLine.contains("great ice wall")) {
                         waypoints.add(new CommissionWaypoint("Ice Walker", 0, 130, 150));
                     }

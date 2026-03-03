@@ -3,6 +3,9 @@ package net.rominux.pasunhack;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -28,13 +31,14 @@ public class PickobulusRender {
                 : client.getBufferBuilders().getEntityVertexConsumers();
         VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 
-        if (showPickobulus && client.player.getMainHandStack().getItem().toString().contains("pickaxe")) {
+        Item item = client.player.getMainHandStack().getItem();
+        if (showPickobulus && (item instanceof PickaxeItem || item == Items.PRISMARINE_SHARD)) {
             HitResult hit = client.crosshairTarget;
             if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = ((BlockHitResult) hit).getBlockPos();
                 if (pos.isWithinDistance(camPos, 6.0)) {
-                    Box box = new Box(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2,
-                            pos.getZ() + 2).offset(-camPos.x, -camPos.y, -camPos.z);
+                    Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3,
+                            pos.getZ() + 3).offset(-camPos.x, -camPos.y, -camPos.z);
                     drawBox(context.matrices(), lineConsumer, box, 0.0f, 1.0f, 0.0f, 1.0f);
                 }
             }
