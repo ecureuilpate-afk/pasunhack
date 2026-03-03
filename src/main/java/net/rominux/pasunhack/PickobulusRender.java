@@ -63,7 +63,7 @@ public class PickobulusRender {
 
                 Vec3d waypointVec3d = new Vec3d(wp.x, wp.y, wp.z);
                 double distance = camPos.distanceTo(waypointVec3d);
-                String label = wp.name + " (" + (int) distance + "m)";
+                String label = "§l§n" + wp.name + " §r(§a" + (int) distance + "m)";
 
                 context.matrices().push();
                 // 1. Déplacer au centre du waypoint (légèrement au-dessus)
@@ -78,7 +78,7 @@ public class PickobulusRender {
                         .multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
 
                 // 3. Réduire la taille du texte (Scale)
-                float scale = 0.025f;
+                float scale = 0.1f;
                 // On utilise un scale négatif pour que le texte ne soit pas inversé (miroir)
                 context.matrices().scale(-scale, -scale, scale);
 
@@ -96,7 +96,7 @@ public class PickobulusRender {
                         immediate,
                         net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH, // C'est CA qui permet de voir
                                                                                           // à travers les murs
-                        0x80000000, // Fond semi-transparent
+                        0xFF000000, // Fond opaque
                         15728880);
 
                 // On force le rendu immédiat pour éviter des conflits de tampons
