@@ -89,6 +89,26 @@ public class PasunhackGui extends Screen {
                         int y = res.button.getY() + 2;
                         context.drawItem(new ItemStack(res.block), x, y);
                 }
+
+                if (this.blockInputField.getText().isEmpty()) {
+                        int centerX = this.width / 2;
+                        int listY = 110;
+                        int index = 0;
+                        for (String blockId : this.config.blocksToMine) {
+                                try {
+                                        Identifier id = Identifier.of(blockId);
+                                        if (Registries.BLOCK.containsId(id)) {
+                                                Block b = Registries.BLOCK.get(id);
+                                                int x = centerX - 100 + 4;
+                                                int y = listY + (index * 24) + 2;
+                                                context.drawItem(new ItemStack(b), x, y);
+                                        }
+                                } catch (Exception e) {
+                                        // Ignore if blockId is malformed
+                                }
+                                index++;
+                        }
+                }
         }
 
         @Override

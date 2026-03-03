@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
+import net.minecraft.world.RaycastContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -86,6 +87,18 @@ public class AutoMiner {
 
                     if (whitelist.contains(block)) {
                         Vec3d targetCenter = Vec3d.ofCenter(pos);
+
+                        BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
+                                client.player.getEyePos(),
+                                targetCenter,
+                                RaycastContext.ShapeType.OUTLINE,
+                                RaycastContext.FluidHandling.NONE,
+                                client.player));
+
+                        if (sightCheck.getType() == HitResult.Type.BLOCK && !sightCheck.getBlockPos().equals(pos)) {
+                            continue;
+                        }
+
                         Vec2f targetAngle = getYawPitch(client.player.getEyePos(), targetCenter);
                         double angleDist = getAngleDistance(client.player.getYaw(), client.player.getPitch(),
                                 targetAngle.x, targetAngle.y);
@@ -112,8 +125,14 @@ public class AutoMiner {
     }
 
     private static void mineAndValidateTarget(MinecraftClient client) {
-        // Maintien actif de l'alignement de la caméra vers le bloc
         if (currentTarget != null && client.player != null) {
+            if (client.player.getEyePos().distanceTo(currentTarget.toCenterPos()) > 4.5) {
+                BLACKLIST_TEMP.add(currentTarget);
+                cancelMining(client);
+                return;
+            }
+
+            // Maintien actif de l'alignement de la caméra vers le bloc
             Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
             Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
             smoothLook(client, angle);
