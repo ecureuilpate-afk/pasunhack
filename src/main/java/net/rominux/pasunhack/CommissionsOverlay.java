@@ -40,9 +40,12 @@ public class CommissionsOverlay implements HudRenderCallback {
             List<String> commissionLines = new ArrayList<>();
             waypoints.clear();
 
-            // Collect and sort strings from tab list.
+            // Collect and sort strings from tab list alphabetically
+            List<PlayerListEntry> sortedEntries = new ArrayList<>(client.player.networkHandler.getPlayerList());
+            sortedEntries.sort((a, b) -> a.getProfile().name().compareToIgnoreCase(b.getProfile().name()));
+
             List<String> rawLines = new ArrayList<>();
-            for (PlayerListEntry entry : client.player.networkHandler.getPlayerList()) {
+            for (PlayerListEntry entry : sortedEntries) {
                 if (entry.getDisplayName() != null) {
                     rawLines.add(entry.getDisplayName().getString());
                 } else {
@@ -50,23 +53,33 @@ public class CommissionsOverlay implements HudRenderCallback {
                 }
             }
 
+            String areaName = "";
+            String mithrilPowder = "";
+            String pickobulusStatus = "";
+
             for (String string : rawLines) {
                 // Remove weird formatting chars before anything
                 string = string.replaceAll("§[0-9a-fk-or]", "").trim();
 
-                if (string.contains("Commissions")) {
+                if (string.startsWith("Area: ")) {
+                    areaName = string.substring(6).trim();
+                } else if (string.startsWith("Mithril: ")) {
+                    mithrilPowder = string.substring(9).trim();
+                } else if (string.startsWith("Pickobulus: ")) {
+                    pickobulusStatus = string.substring(12).trim();
+                }
+
+                if (string.equals("Commissions:") || string.equals("Commissions")) {
                     foundCommissions = true;
                     continue;
                 }
 
                 if (foundCommissions) {
-                    if (string.isEmpty() || string.startsWith("Skills") || string.startsWith("Events")
-                            || string.startsWith("Dungeons")) {
-                        // Stop parsing if we hit an explicit new category
-                        if (string.startsWith("Skills") || string.startsWith("Events")
-                                || string.startsWith("Dungeons")) {
-                            break;
-                        }
+                    if (string.isEmpty() || string.endsWith(":") || string.startsWith("Skills")
+                            || string.startsWith("Events")
+                            || string.startsWith("Dungeons") || string.startsWith("Powders")
+                            || string.startsWith("Pickaxe Ability")) {
+                        foundCommissions = false; // Stop parsing commissions when hitting the end of the section
                         continue;
                     }
 
@@ -77,8 +90,7 @@ public class CommissionsOverlay implements HudRenderCallback {
 
                         // Prevent adding DONE commissions or duplicate entries for display
                         if (!progress.equalsIgnoreCase("DONE") && !progress.isEmpty()) {
-                            String displayLine = name + ": " + progress;
-                            commissionLines.add(displayLine);
+                            commissionLines.add(name + ": " + progress);
                         }
                     }
                 }
@@ -92,26 +104,44 @@ public class CommissionsOverlay implements HudRenderCallback {
             } catch (Exception ignored) {
             }
 
+            List<String> displayLines = new ArrayList<>();
+            if (!areaName.isEmpty())
+                displayLines.add("§l" + areaName);
+            if (!mithrilPowder.isEmpty())
+                displayLines.add("Mithril: " + mithrilPowder);
+            if (!pickobulusStatus.isEmpty())
+                displayLines.add("Pickobulus: " + pickobulusStatus);
             if (!commissionLines.isEmpty()) {
+                displayLines.add(""); // Empty line separator
+                displayLines.add("§lCommissions");
+                displayLines.addAll(commissionLines);
+            }
+
+            if (!displayLines.isEmpty()) {
                 int y = 5;
-                int maxW = client.textRenderer.getWidth("§lCommissions");
-                for (String s : commissionLines) {
-                    int w = client.textRenderer.getWidth(s);
+                int maxW = 50; // Minimum width
+                for (String s : displayLines) {
+                    int w = client.textRenderer.getWidth(s.replaceAll("§[0-9a-fk-or]", ""));
                     if (w > maxW)
                         maxW = w;
                 }
 
-                int h = (commissionLines.size() + 1) * 10 + 4;
-                context.fill(2, 2, maxW + 8, h, 0x90000000); // 0xAARRGGBB format for color
+                int h = displayLines.size() * 10 + 4;
+                context.fill(2, 2, maxW + 8, h + 2, 0x90000000); // 0xAARRGGBB format for color
 
-                context.drawTextWithShadow(client.textRenderer, Text.literal("§lCommissions"), 5, y, 0xFFFFAA00); // Orange/Gold
-                y += 10;
+                for (String line : displayLines) {
+                    int color = 0xFFFFFFFF; // White text 100% opacity
+                    if (line.equals("§l" + areaName))
+                        color = 0xFF55FF55; // Light green for area
+                    else if (line.equals("§lCommissions"))
+                        color = 0xFFFFAA00; // Orange for Commissions title
 
-                for (String line : commissionLines) {
-                    context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, 0xFFFFFFFF);
+                    context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, color);
                     y += 10;
+                }
 
-                    if (PasunhackConfig.getInstance().showCommissionWaypoints) {
+                if (PasunhackConfig.getInstance().showCommissionWaypoints) {
+                    for (String line : commissionLines) {
                         String lowerLine = line.toLowerCase();
                         if (lowerLine.contains("upper mines")) {
                             waypoints.add(new CommissionWaypoint("Upper Mines", -130, 174, -50));
