@@ -78,12 +78,24 @@ public class PickobulusRender {
                         text,
                         textWidth,
                         0f,
-                        0xFFFFFFFF,
+                        0x33FFFFFF, // Semi-transparent text for see-through
                         false,
                         posMat,
                         immediate,
                         net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH,
                         0x40000000,
+                        15728880);
+
+                textRenderer.draw(
+                        text,
+                        textWidth,
+                        0f,
+                        0xFFFFFFFF, // Opaque text for normal rendering
+                        false,
+                        posMat,
+                        immediate,
+                        net.minecraft.client.font.TextRenderer.TextLayerType.NORMAL,
+                        0x00000000,
                         15728880);
                 immediate.draw();
                 context.matrices().pop();

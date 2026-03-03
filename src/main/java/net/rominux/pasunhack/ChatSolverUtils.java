@@ -40,6 +40,7 @@ public class ChatSolverUtils {
                 return;
 
             String text = message.getString();
+            text = text.replaceAll("§[0-9a-fk-or]", "");
 
             // Check for Fetchur
             if (PasunhackConfig.getInstance().solveFetchur) {
