@@ -65,6 +65,16 @@ public class PickobulusRender {
                 double distance = camPos.distanceTo(waypointVec3d);
                 String label = "§l§n" + wp.name + " §r(§a" + (int) distance + "m)";
 
+                int textColor = 0xFFFFFFFF; // Blanc par défaut (Titanium ou autre)
+                String lowerName = wp.name.toLowerCase();
+                if (lowerName.contains("goblin") || lowerName.contains("glacite")) {
+                    textColor = 0xFFFF5555; // Rouge
+                } else if (lowerName.contains("mithril")) {
+                    textColor = 0xFF5555FF; // Bleu
+                } else if (lowerName.contains("emissary")) {
+                    textColor = 0xFFFFAA00; // Orange
+                }
+
                 context.matrices().push();
                 // 1. Déplacer au centre du waypoint (légèrement au-dessus)
                 context.matrices().translate(waypointVec3d.x - camPos.x, waypointVec3d.y + 1.0 - camPos.y,
@@ -78,7 +88,7 @@ public class PickobulusRender {
                         .multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
 
                 // 3. Réduire la taille du texte (Scale)
-                float scale = 0.1f;
+                float scale = 0.025f * (float) Math.max(2.0, distance / 10.0);
                 // On utilise un scale négatif pour que le texte ne soit pas inversé (miroir)
                 context.matrices().scale(-scale, -scale, scale);
 
@@ -90,7 +100,7 @@ public class PickobulusRender {
                         label,
                         xOffset,
                         0f,
-                        0xFF000000, // Couleur du texte (Blanc)
+                        textColor, // Couleur du texte
                         false, // Pas d'ombre portée classique car on a un background
                         positionMatrix,
                         immediate,
