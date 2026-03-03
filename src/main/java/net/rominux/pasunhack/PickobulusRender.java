@@ -58,7 +58,22 @@ public class PickobulusRender {
             net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
                     .getEntityVertexConsumers();
 
-            for (CommissionsOverlay.CommissionWaypoint wp : CommissionsOverlay.waypoints) {
+            List<CommissionsOverlay.CommissionWaypoint> sortedWaypoints = new ArrayList<>(CommissionsOverlay.waypoints);
+            sortedWaypoints.sort((w1, w2) -> {
+                String n1 = w1.name.toLowerCase();
+                String n2 = w2.name.toLowerCase();
+                int p1 = n1.contains("mithril") ? 1 : (n1.contains("titanium") ? 2 : 3);
+                int p2 = n2.contains("mithril") ? 1 : (n2.contains("titanium") ? 2 : 3);
+                return Integer.compare(p1, p2);
+            });
+
+            java.util.Map<BlockPos, Integer> drawnCounts = new java.util.HashMap<>();
+
+            for (CommissionsOverlay.CommissionWaypoint wp : sortedWaypoints) {
+                BlockPos bPos = new BlockPos(wp.x, wp.y, wp.z);
+                int count = drawnCounts.getOrDefault(bPos, 0);
+                drawnCounts.put(bPos, count + 1);
+
                 // Draw Pillar (Beacon Beam)
                 Box box = new Box(wp.x - 0.1, wp.y, wp.z - 0.1, wp.x + 0.1, wp.y + 100, wp.z + 0.1)
                         .offset(-camPos.x, -camPos.y, -camPos.z);
@@ -68,7 +83,7 @@ public class PickobulusRender {
 
                 Vec3d waypointVec3d = new Vec3d(wp.x, wp.y, wp.z);
                 double distance = camPos.distanceTo(waypointVec3d);
-                String label = "§l§n" + wp.name + "§r §a(" + (int) distance + "m)";
+                String label = "\u00A7l\u00A7n" + wp.name + "\u00A7r \u00A7a(" + (int) distance + "m)";
 
                 int textColor = 0xFFFFFFFF; // Blanc par défaut (Titanium ou autre)
                 String lowerName = wp.name.toLowerCase();
@@ -81,8 +96,11 @@ public class PickobulusRender {
                 }
 
                 context.matrices().push();
-                // 1. Déplacer au centre du waypoint (légèrement au-dessus)
-                context.matrices().translate(waypointVec3d.x - camPos.x, waypointVec3d.y + 1.0 - camPos.y,
+
+                double yOffset = 1.0 - (count * 0.4);
+
+                // 1. Déplacer au centre du waypoint (légèrement au-dessus + décalage)
+                context.matrices().translate(waypointVec3d.x - camPos.x, waypointVec3d.y + yOffset - camPos.y,
                         waypointVec3d.z - camPos.z);
 
                 // 2. Faire pivoter le texte pour qu'il regarde toujours la caméra

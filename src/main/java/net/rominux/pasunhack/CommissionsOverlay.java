@@ -62,7 +62,7 @@ public class CommissionsOverlay implements HudRenderCallback {
 
             for (String string : rawLines) {
                 // Remove weird formatting chars before anything
-                string = string.replaceAll("§[0-9a-fk-or]", "").trim();
+                string = string.replaceAll("\\u00A7.", "").trim();
 
                 if (string.startsWith("Area: ")) {
                     areaName = string.substring(6).trim();
@@ -111,14 +111,14 @@ public class CommissionsOverlay implements HudRenderCallback {
 
             List<String> displayLines = new ArrayList<>();
             if (!areaName.isEmpty())
-                displayLines.add("§l" + areaName);
+                displayLines.add("\u00A7l" + areaName);
             if (!mithrilPowder.isEmpty())
                 displayLines.add("Mithril: " + mithrilPowder);
             if (!pickobulusStatus.isEmpty())
                 displayLines.add("Pickobulus: " + pickobulusStatus);
             if (!commissionLines.isEmpty()) {
                 displayLines.add(""); // Empty line separator
-                displayLines.add("§lCommissions");
+                displayLines.add("\u00A7lCommissions");
                 displayLines.addAll(commissionLines);
             }
 
@@ -126,7 +126,7 @@ public class CommissionsOverlay implements HudRenderCallback {
                 int y = 5;
                 int maxW = 50; // Minimum width
                 for (String s : displayLines) {
-                    int w = client.textRenderer.getWidth(s.replaceAll("§[0-9a-fk-or]", ""));
+                    int w = client.textRenderer.getWidth(s.replaceAll("\\u00A7.", ""));
                     if (w > maxW)
                         maxW = w;
                 }
@@ -136,9 +136,9 @@ public class CommissionsOverlay implements HudRenderCallback {
 
                 for (String line : displayLines) {
                     int color = 0xFFFFFFFF; // White text 100% opacity
-                    if (line.equals("§l" + areaName))
+                    if (line.equals("\u00A7l" + areaName))
                         color = 0xFF55FF55; // Light green for area
-                    else if (line.equals("§lCommissions"))
+                    else if (line.equals("\u00A7lCommissions"))
                         color = 0xFFFFAA00; // Orange for Commissions title
 
                     context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, color);

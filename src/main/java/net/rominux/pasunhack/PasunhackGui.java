@@ -249,7 +249,7 @@ public class PasunhackGui extends Screen {
                         for (String block : this.config.blocksToMine) {
                                 final String b = block;
                                 ButtonWidget removeBtn = ButtonWidget
-                                                .builder(Text.literal("§c[X] §r" + block), button -> {
+                                                .builder(Text.literal("\u00A7c[X] \u00A7r" + block), button -> {
                                                         this.config.blocksToMine.remove(b);
                                                         this.init();
                                                 }).dimensions(centerX - 100, listY + (index * 24), 200, 20).build();
