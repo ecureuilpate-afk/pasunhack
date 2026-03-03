@@ -35,48 +35,32 @@ public class CommissionsOverlay implements HudRenderCallback {
         if (client.player == null || client.player.networkHandler == null)
             return;
 
-        net.minecraft.scoreboard.Scoreboard scoreboard = client.world.getScoreboard();
-        net.minecraft.scoreboard.ScoreboardObjective objective = scoreboard
-                .getObjectiveForSlot(net.minecraft.scoreboard.ScoreboardDisplaySlot.SIDEBAR);
-
-        if (objective == null)
-            return;
-
         List<String> commissionLines = new ArrayList<>();
         boolean foundCommissions = false;
         int linesToRead = 0;
 
-        Collection<net.minecraft.scoreboard.ScoreboardEntry> scoreboardEntries = scoreboard
-                .getScoreboardEntries(objective);
-        List<net.minecraft.scoreboard.ScoreboardEntry> sortedEntries = new ArrayList<>(scoreboardEntries);
-        // Sort entries by their value (score) to parse from top to bottom
-        sortedEntries.sort((a, b) -> Integer.compare(b.value(), a.value()));
+        Collection<PlayerListEntry> playerList = client.player.networkHandler.getPlayerList();
 
-        for (net.minecraft.scoreboard.ScoreboardEntry entry : sortedEntries) {
-            String owner = entry.owner();
-            net.minecraft.scoreboard.Team team = scoreboard.getScoreHolderTeam(owner);
+        for (PlayerListEntry entry : playerList) {
+            if (entry.getDisplayName() == null)
+                continue;
 
-            String prefix = team != null ? team.getPrefix().getString() : "";
-            String suffix = team != null ? team.getSuffix().getString() : "";
+            String cleanLine = entry.getDisplayName().getString().replaceAll("§[0-9a-fk-or]", "").trim();
 
-            String rawText = prefix + owner + suffix;
-            String cleanText = rawText.replaceAll("§[0-9a-fk-or]", "").trim();
-
-            if (cleanText.isEmpty())
+            if (cleanLine.isEmpty())
                 continue;
 
             if (foundCommissions) {
                 if (linesToRead <= 0)
                     break;
-                // Since scoreboard entries have random scores, skip empty/irrelevant ones like
-                // URL or Date
-                if (cleanText.contains("www.hypixel.net"))
+                if (cleanLine.contains("www.hypixel.net"))
                     break;
-                commissionLines.add(cleanText);
+
+                commissionLines.add(cleanLine);
                 linesToRead--;
-            } else if (cleanText.contains("Commissions")) {
+            } else if (cleanLine.contains("Commissions")) {
                 foundCommissions = true;
-                commissionLines.add("§l" + cleanText);
+                commissionLines.add("§l" + cleanLine);
                 linesToRead = 4;
             }
         }
