@@ -35,7 +35,7 @@ public class PickobulusRender {
             HitResult hit = client.crosshairTarget;
             if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = ((BlockHitResult) hit).getBlockPos();
-                if (pos.isWithinDistance(camPos, 6.0)) {
+                if (pos.isWithinDistance(camPos, 20.0)) {
                     Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3,
                             pos.getZ() + 3).offset(-camPos.x, -camPos.y, -camPos.z);
                     drawBox(context.matrices(), lineConsumer, box, 0.0f, 1.0f, 0.0f, 1.0f);

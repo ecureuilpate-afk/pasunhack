@@ -41,10 +41,9 @@ public class CommissionsOverlay implements HudRenderCallback {
         int linesToRead = 0;
 
         for (PlayerListEntry entry : playerList) {
-            String text = entry.getDisplayName() != null ? entry.getDisplayName().getString()
-                    : "Unknown";
-
-            String cleanText = text.replaceAll("§.", "").replaceAll("[^a-zA-Z0-9 %:]", "").trim();
+            if (entry.getDisplayName() == null)
+                continue;
+            String cleanText = entry.getDisplayName().getString().replaceAll("§[0-9a-fk-or]", "").trim();
 
             if (foundCommissions) {
                 if (cleanText.isEmpty() || linesToRead <= 0) {
