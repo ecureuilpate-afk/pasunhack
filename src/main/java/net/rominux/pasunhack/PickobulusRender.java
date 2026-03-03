@@ -61,42 +61,45 @@ public class PickobulusRender {
                 VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
                 drawBox(context.matrices(), lineConsumer, box, 1.0f, 0.5f, 0.0f, 0.8f);
 
-                double dist = Math.sqrt((wp.x - camPos.x) * (wp.x - camPos.x) + (wp.y - camPos.y) * (wp.y - camPos.y)
-                        + (wp.z - camPos.z) * (wp.z - camPos.z));
-                float scale = (float) Math.max(0.025, dist * 0.0035);
+                Vec3d waypointVec3d = new Vec3d(wp.x, wp.y, wp.z);
+                double distance = camPos.distanceTo(waypointVec3d);
+                String label = wp.name + " (" + (int) distance + "m)";
 
                 context.matrices().push();
-                context.matrices().translate(wp.x + 0.0 - camPos.x, wp.y + 2.0 - camPos.y, wp.z + 0.0 - camPos.z);
-                context.matrices().multiply(camera.getRotation());
+                // 1. Déplacer au centre du waypoint (légèrement au-dessus)
+                context.matrices().translate(waypointVec3d.x - camPos.x, waypointVec3d.y + 1.0 - camPos.y,
+                        waypointVec3d.z - camPos.z);
+
+                // 2. Faire pivoter le texte pour qu'il regarde toujours la caméra
+                // (Billboarding)
+                context.matrices()
+                        .multiply(net.minecraft.util.math.RotationAxis.POSITIVE_Y.rotationDegrees(-camera.getYaw()));
+                context.matrices()
+                        .multiply(net.minecraft.util.math.RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
+
+                // 3. Réduire la taille du texte (Scale)
+                float scale = 0.025f;
+                // On utilise un scale négatif pour que le texte ne soit pas inversé (miroir)
                 context.matrices().scale(-scale, -scale, scale);
 
-                String text = wp.name + " (" + (int) dist + "m)";
-                float textWidth = (float) -textRenderer.getWidth(text) / 2;
-                org.joml.Matrix4f posMat = context.matrices().peek().getPositionMatrix();
+                // 4. Rendu du texte à travers les murs (SEE_THROUGH)
+                float xOffset = -textRenderer.getWidth(label) / 2.0f; // Centrer le texte
+                org.joml.Matrix4f positionMatrix = context.matrices().peek().getPositionMatrix();
 
                 textRenderer.draw(
-                        text,
-                        textWidth,
+                        label,
+                        xOffset,
                         0f,
-                        0x33FFFFFF, // Semi-transparent text for see-through
-                        false,
-                        posMat,
+                        0xFFFFFF, // Couleur du texte (Blanc)
+                        false, // Pas d'ombre portée classique car on a un background
+                        positionMatrix,
                         immediate,
-                        net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH,
-                        0x40000000,
+                        net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH, // C'est CA qui permet de voir
+                                                                                          // à travers les murs
+                        0x80000000, // Fond semi-transparent
                         15728880);
 
-                textRenderer.draw(
-                        text,
-                        textWidth,
-                        0f,
-                        0xFFFFFFFF, // Opaque text for normal rendering
-                        false,
-                        posMat,
-                        immediate,
-                        net.minecraft.client.font.TextRenderer.TextLayerType.NORMAL,
-                        0x00000000,
-                        15728880);
+                // On force le rendu immédiat pour éviter des conflits de tampons
                 immediate.draw();
                 context.matrices().pop();
             }
