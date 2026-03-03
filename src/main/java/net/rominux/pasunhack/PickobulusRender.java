@@ -83,8 +83,8 @@ public class PickobulusRender {
                         posMat,
                         immediate,
                         net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH,
-                        0x40000000,
-                        0xF000F0);
+                        0x00000000,
+                        15728880);
                 immediate.draw();
                 context.matrices().pop();
             }
