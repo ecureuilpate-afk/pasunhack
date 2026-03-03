@@ -35,45 +35,43 @@ public class CommissionsOverlay implements HudRenderCallback {
         if (client.player == null || client.player.networkHandler == null)
             return;
 
-        List<PlayerListEntry> playerList = new ArrayList<>(client.player.networkHandler.getPlayerList());
-        playerList.sort((a, b) -> {
-            net.minecraft.scoreboard.Team teamA = a.getScoreboardTeam();
-            net.minecraft.scoreboard.Team teamB = b.getScoreboardTeam();
-            int result = Boolean.compare(a.getGameMode() == net.minecraft.world.GameMode.SPECTATOR,
-                    b.getGameMode() == net.minecraft.world.GameMode.SPECTATOR);
-            if (result != 0)
-                return result;
-            result = (teamA != null ? teamA.getName() : "").compareTo(teamB != null ? teamB.getName() : "");
-            if (result != 0)
-                return result;
-            return a.getProfile().name().compareToIgnoreCase(b.getProfile().name());
-        });
+        net.minecraft.scoreboard.Scoreboard scoreboard = client.world.getScoreboard();
+        net.minecraft.scoreboard.ScoreboardObjective objective = scoreboard
+                .getObjectiveForSlot(net.minecraft.scoreboard.ScoreboardDisplaySlot.SIDEBAR);
+
+        if (objective == null)
+            return;
 
         List<String> commissionLines = new ArrayList<>();
         boolean foundCommissions = false;
         int linesToRead = 0;
 
-        for (PlayerListEntry entry : playerList) {
-            String rawText = "";
-            if (entry.getDisplayName() != null) {
-                rawText = entry.getDisplayName().getString();
-            } else {
-                net.minecraft.scoreboard.Team team = entry.getScoreboardTeam();
-                String prefix = team != null ? team.getPrefix().getString() : "";
-                String suffix = team != null ? team.getSuffix().getString() : "";
-                String name = entry.getProfile() != null ? entry.getProfile().name() : "";
-                rawText = prefix + name + suffix;
-            }
+        Collection<net.minecraft.scoreboard.ScoreboardEntry> scoreboardEntries = scoreboard
+                .getScoreboardEntries(objective);
+        List<net.minecraft.scoreboard.ScoreboardEntry> sortedEntries = new ArrayList<>(scoreboardEntries);
+        // Sort entries by their value (score) to parse from top to bottom
+        sortedEntries.sort((a, b) -> Integer.compare(b.value(), a.value()));
 
-            if (rawText.isEmpty())
-                continue;
+        for (net.minecraft.scoreboard.ScoreboardEntry entry : sortedEntries) {
+            String owner = entry.owner();
+            net.minecraft.scoreboard.Team team = scoreboard.getScoreHolderTeam(owner);
 
+            String prefix = team != null ? team.getPrefix().getString() : "";
+            String suffix = team != null ? team.getSuffix().getString() : "";
+
+            String rawText = prefix + owner + suffix;
             String cleanText = rawText.replaceAll("§[0-9a-fk-or]", "").trim();
 
+            if (cleanText.isEmpty())
+                continue;
+
             if (foundCommissions) {
-                if (cleanText.isEmpty() || linesToRead <= 0) {
+                if (linesToRead <= 0)
                     break;
-                }
+                // Since scoreboard entries have random scores, skip empty/irrelevant ones like
+                // URL or Date
+                if (cleanText.contains("www.hypixel.net"))
+                    break;
                 commissionLines.add(cleanText);
                 linesToRead--;
             } else if (cleanText.contains("Commissions")) {
