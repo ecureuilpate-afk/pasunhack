@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class CommissionsOverlay implements HudRenderCallback {
-    public static final List<CommissionWaypoint> waypoints = new ArrayList<>();
+    public static final List<CommissionWaypoint> waypoints = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     public static class CommissionWaypoint {
         public String name;
