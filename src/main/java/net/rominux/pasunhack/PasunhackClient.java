@@ -30,6 +30,8 @@ public class PasunhackClient implements ClientModInitializer {
         HudRenderCallback.EVENT.register(new CommissionsOverlay());
         WorldRenderEvents.END_MAIN.register(PickobulusRender::onLast);
 
+        ChatSolverUtils.init();
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
             // 1. Ouvre le GUI si on appuie sur la touche du menu (G)

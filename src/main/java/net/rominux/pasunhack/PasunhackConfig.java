@@ -27,6 +27,8 @@ public class PasunhackConfig {
     public boolean showCommissionsHud = true;
     public boolean showPickobulusPreview = true;
     public boolean showCommissionWaypoints = true;
+    public boolean solveFetchur = true;
+    public boolean solvePuzzler = true;
 
     private static PasunhackConfig instance;
 

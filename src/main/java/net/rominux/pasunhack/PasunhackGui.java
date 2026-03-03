@@ -99,12 +99,32 @@ public class PasunhackGui extends Screen {
                                 .dimensions(rX, 115, 130, 20).build());
 
                 this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Solve Fetchur: " + (config.solveFetchur ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.solveFetchur = !config.solveFetchur;
+                                                        btn.setMessage(Text.literal("Solve Fetchur: "
+                                                                        + (config.solveFetchur ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 140, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Solve Puzzler: " + (config.solvePuzzler ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.solvePuzzler = !config.solvePuzzler;
+                                                        btn.setMessage(Text.literal("Solve Puzzler: "
+                                                                        + (config.solvePuzzler ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 165, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
                                 .builder(Text.literal("Dump TabList -> Logs"),
                                                 btn -> {
                                                         dumpTablistLogs();
                                                         btn.setMessage(Text.literal("Dumped !"));
                                                 })
-                                .dimensions(rX, 140, 130, 20).build());
+                                .dimensions(rX, 190, 130, 20).build());
 
                 // Block Input Field
                 this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,
