@@ -103,7 +103,7 @@ public class CommissionsOverlay implements HudRenderCallback {
                 y += 10;
 
                 for (String line : commissionLines) {
-                    context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, 0xFFFFFF);
+                    context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, 0xFFFFFFFF);
                     y += 10;
 
                     if (PasunhackConfig.getInstance().showCommissionWaypoints) {

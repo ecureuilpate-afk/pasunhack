@@ -55,7 +55,7 @@ public class PickobulusRender {
 
             for (CommissionsOverlay.CommissionWaypoint wp : CommissionsOverlay.waypoints) {
                 // Draw Pillar (Beacon Beam)
-                Box box = new Box(wp.x - 0.5, wp.y, wp.z - 0.5, wp.x + 0.5, wp.y + 100, wp.z + 0.5)
+                Box box = new Box(wp.x - 0.1, wp.y, wp.z - 0.1, wp.x + 0.1, wp.y + 100, wp.z + 0.1)
                         .offset(-camPos.x, -camPos.y, -camPos.z);
 
                 VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
@@ -78,7 +78,7 @@ public class PickobulusRender {
                         text,
                         textWidth,
                         0f,
-                        0xFFAA00,
+                        0xFFFFAA00,
                         false,
                         posMat,
                         immediate,
