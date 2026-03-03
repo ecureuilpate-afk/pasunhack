@@ -40,21 +40,32 @@ public class CommissionsOverlay implements HudRenderCallback {
             waypoints.clear();
 
             Collection<PlayerListEntry> playerList = client.player.networkHandler.getPlayerList();
+            List<PlayerListEntry> sortedList = new ArrayList<>(playerList);
+            sortedList.sort((a, b) -> a.getProfile().name().compareToIgnoreCase(b.getProfile().name()));
 
-            for (PlayerListEntry entry : playerList) {
+            boolean foundCommissions = false;
+            int linesToRead = 0;
+
+            for (PlayerListEntry entry : sortedList) {
                 if (entry.getDisplayName() == null)
                     continue;
 
                 String cleanLine = entry.getDisplayName().getString().replaceAll("§[0-9a-fk-or]", "").trim();
-
                 if (cleanLine.isEmpty())
                     continue;
 
-                // Checking if it contains a commission-like text and isn't something like
-                // Profile/XP
-                if ((cleanLine.endsWith("%") || cleanLine.contains("DONE")) && !cleanLine.contains("XP")
-                        && !cleanLine.contains("Profile")) {
+                if (foundCommissions) {
+                    if (linesToRead <= 0)
+                        break;
+                    if (cleanLine.contains("www.hypixel.net") || cleanLine.contains("XP")
+                            || cleanLine.contains("Profile"))
+                        break;
+
                     commissionLines.add(cleanLine);
+                    linesToRead--;
+                } else if (cleanLine.contains("Commissions")) {
+                    foundCommissions = true;
+                    linesToRead = 4;
                 }
             }
 
