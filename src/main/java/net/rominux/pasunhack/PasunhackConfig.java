@@ -20,9 +20,13 @@ public class PasunhackConfig {
     public List<String> blocksToMine = new ArrayList<>(Arrays.asList(
             "minecraft:diamond_ore",
             "minecraft:deepslate_diamond_ore",
-            "minecraft:ancient_debris"
-    ));
+            "minecraft:ancient_debris"));
     public int toggleKeyBinding = GLFW.GLFW_KEY_F6;
+
+    public boolean autoPrecisionMiner = false;
+    public boolean showCommissionsHud = true;
+    public boolean showPickobulusPreview = true;
+    public boolean showCommissionWaypoints = true;
 
     private static PasunhackConfig instance;
 

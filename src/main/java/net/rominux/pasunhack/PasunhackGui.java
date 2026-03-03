@@ -59,6 +59,45 @@ public class PasunhackGui extends Screen {
                 }).dimensions(centerX - 100, 40, 200, 20).build();
                 this.addDrawableChild(this.toggleKeyButton);
 
+                int rX = centerX + 110;
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Precision: " + (config.autoPrecisionMiner ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.autoPrecisionMiner = !config.autoPrecisionMiner;
+                                                        btn.setMessage(Text.literal("Precision: "
+                                                                        + (config.autoPrecisionMiner ? "ON" : "OFF")));
+                                                })
+                                .dimensions(rX, 40, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("HUD Comms: " + (config.showCommissionsHud ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.showCommissionsHud = !config.showCommissionsHud;
+                                                        btn.setMessage(Text.literal("HUD Comms: "
+                                                                        + (config.showCommissionsHud ? "ON" : "OFF")));
+                                                })
+                                .dimensions(rX, 65, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Pickobulus: " + (config.showPickobulusPreview ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.showPickobulusPreview = !config.showPickobulusPreview;
+                                                        btn.setMessage(Text.literal("Pickobulus: "
+                                                                        + (config.showPickobulusPreview ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 90, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Waypoints: " + (config.showCommissionWaypoints ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.showCommissionWaypoints = !config.showCommissionWaypoints;
+                                                        btn.setMessage(Text.literal("Waypoints: "
+                                                                        + (config.showCommissionWaypoints ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 115, 130, 20).build());
+
                 // Block Input Field
                 this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,
                                 Text.literal("Chercher un bloc..."));

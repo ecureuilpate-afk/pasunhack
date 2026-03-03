@@ -17,10 +17,12 @@ import java.util.Set;
 public class AutoMiner {
 
     private static boolean enabled = false;
-    private static BlockPos currentTarget = null;
     private static long miningStartTime = 0;
     private static Vec3d lastPlayerPos = null;
     private static int aimWaitTicks = 0;
+
+    public static Vec3d precisionTarget = null;
+    public static BlockPos currentTarget = null;
 
     public static final Set<BlockPos> BLACKLIST_TEMP = new HashSet<>();
 
@@ -87,19 +89,36 @@ public class AutoMiner {
 
                     if (whitelist.contains(block)) {
                         Vec3d targetCenter = Vec3d.ofCenter(pos);
-
-                        BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
-                                client.player.getEyePos(),
+                        Vec3d[] pointsToTest = {
                                 targetCenter,
-                                RaycastContext.ShapeType.OUTLINE,
-                                RaycastContext.FluidHandling.NONE,
-                                client.player));
+                                targetCenter.add(0.49, 0, 0),
+                                targetCenter.add(-0.49, 0, 0),
+                                targetCenter.add(0, 0.49, 0),
+                                targetCenter.add(0, -0.49, 0),
+                                targetCenter.add(0, 0, 0.49),
+                                targetCenter.add(0, 0, -0.49)
+                        };
 
-                        if (sightCheck.getType() == HitResult.Type.BLOCK && !sightCheck.getBlockPos().equals(pos)) {
+                        Vec3d validPoint = null;
+                        for (Vec3d p : pointsToTest) {
+                            BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
+                                    client.player.getEyePos(),
+                                    p,
+                                    RaycastContext.ShapeType.OUTLINE,
+                                    RaycastContext.FluidHandling.NONE,
+                                    client.player));
+
+                            if (sightCheck.getType() == HitResult.Type.MISS || sightCheck.getBlockPos().equals(pos)) {
+                                validPoint = p;
+                                break;
+                            }
+                        }
+
+                        if (validPoint == null) {
                             continue;
                         }
 
-                        Vec2f targetAngle = getYawPitch(client.player.getEyePos(), targetCenter);
+                        Vec2f targetAngle = getYawPitch(client.player.getEyePos(), validPoint);
                         double angleDist = getAngleDistance(client.player.getYaw(), client.player.getPitch(),
                                 targetAngle.x, targetAngle.y);
 
@@ -120,6 +139,7 @@ public class AutoMiner {
             smoothLook(client, angle);
 
             currentTarget = bestTarget;
+            precisionTarget = null;
             aimWaitTicks = 0; // Réinitialise les Ticks d'attente pour le Raycast
         }
     }
@@ -177,6 +197,7 @@ public class AutoMiner {
             client.interactionManager.cancelBlockBreaking();
         }
         currentTarget = null;
+        precisionTarget = null;
         miningStartTime = 0;
         aimWaitTicks = 0;
     }
@@ -213,8 +234,13 @@ public class AutoMiner {
         float currentYaw = client.player.getYaw();
         float currentPitch = client.player.getPitch();
 
-        float newYaw = MathHelper.lerpAngleDegrees(0.15f, currentYaw, targetAngle.x);
-        float newPitch = MathHelper.lerpAngleDegrees(0.15f, currentPitch, targetAngle.y);
+        Vec2f target = targetAngle;
+        if (PasunhackConfig.getInstance().autoPrecisionMiner && precisionTarget != null) {
+            target = getYawPitch(client.player.getEyePos(), precisionTarget);
+        }
+
+        float newYaw = MathHelper.lerpAngleDegrees(0.45f, currentYaw, target.x);
+        float newPitch = MathHelper.lerpAngleDegrees(0.45f, currentPitch, target.y);
 
         client.player.setYaw(newYaw);
         client.player.setPitch(newPitch);

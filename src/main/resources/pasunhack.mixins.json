@@ -3,7 +3,11 @@
 	"package": "net.rominux.pasunhack.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"ParticleManagerMixin"
+	],
+	"client": [
+		"ParticleManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
