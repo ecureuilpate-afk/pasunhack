@@ -70,7 +70,7 @@ public class PickobulusRender {
                 context.matrices().multiply(camera.getRotation());
                 context.matrices().scale(-scale, -scale, scale);
 
-                String text = wp.name;
+                String text = wp.name + " (" + (int) dist + "m)";
                 float textWidth = (float) -textRenderer.getWidth(text) / 2;
                 org.joml.Matrix4f posMat = context.matrices().peek().getPositionMatrix();
 
@@ -78,12 +78,12 @@ public class PickobulusRender {
                         text,
                         textWidth,
                         0f,
-                        0xFFFFAA00,
+                        0xFFFFFFFF,
                         false,
                         posMat,
                         immediate,
                         net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH,
-                        0x00000000,
+                        0x40000000,
                         15728880);
                 immediate.draw();
                 context.matrices().pop();

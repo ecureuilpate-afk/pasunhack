@@ -57,6 +57,8 @@ public class CommissionsOverlay implements HudRenderCallback {
             String mithrilPowder = "";
             String pickobulusStatus = "";
 
+            boolean hasCompletedCommission = false;
+
             for (String string : rawLines) {
                 // Remove weird formatting chars before anything
                 string = string.replaceAll("§[0-9a-fk-or]", "").trim();
@@ -88,8 +90,10 @@ public class CommissionsOverlay implements HudRenderCallback {
                         String name = parts[0].trim();
                         String progress = parts[1].trim();
 
-                        // Prevent adding DONE commissions or duplicate entries for display
-                        if (!progress.equalsIgnoreCase("DONE") && !progress.isEmpty()) {
+                        // Track completed commissions
+                        if (progress.equalsIgnoreCase("DONE")) {
+                            hasCompletedCommission = true;
+                        } else if (!progress.isEmpty() && !progress.equalsIgnoreCase("DONE")) {
                             commissionLines.add(name + ": " + progress);
                         }
                     }
@@ -141,6 +145,17 @@ public class CommissionsOverlay implements HudRenderCallback {
                 }
 
                 if (PasunhackConfig.getInstance().showCommissionWaypoints) {
+                    if (hasCompletedCommission) {
+                        waypoints.add(new CommissionWaypoint("Emissary", 58, 198, -8));
+                        waypoints.add(new CommissionWaypoint("Emissary", 42, 134, 22));
+                        waypoints.add(new CommissionWaypoint("Emissary", -72, 153, -10));
+                        waypoints.add(new CommissionWaypoint("Emissary", -132, 174, -50));
+                        waypoints.add(new CommissionWaypoint("Emissary", 171, 150, 31));
+                        waypoints.add(new CommissionWaypoint("Emissary", -37, 200, -131));
+                        waypoints.add(new CommissionWaypoint("Emissary", 89, 198, -92));
+                        waypoints.add(new CommissionWaypoint("Emissary", -7, 126, 229)); // Glacite emissary/campfire
+                    }
+
                     for (String line : commissionLines) {
                         String lowerLine = line.toLowerCase();
                         if (lowerLine.contains("upper mines")) {
