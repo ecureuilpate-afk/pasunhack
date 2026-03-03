@@ -7,8 +7,7 @@
 		"ParticleManagerMixin"
 	],
 	"client": [
-		"ParticleManagerMixin",
-		"PlayerListHudAccessor"
+		"ParticleManagerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
