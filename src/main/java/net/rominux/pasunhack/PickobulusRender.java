@@ -32,7 +32,12 @@ public class PickobulusRender {
 
         Item item = client.player.getMainHandStack().getItem();
         if (showPickobulus && (item.toString().contains("pickaxe") || item == Items.PRISMARINE_SHARD)) {
-            HitResult hit = client.crosshairTarget;
+            Vec3d start = client.player.getEyePos();
+            Vec3d end = start.add(client.player.getRotationVec(1.0f).multiply(20.0));
+            HitResult hit = client.world.raycast(new net.minecraft.world.RaycastContext(start, end,
+                    net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
+                    net.minecraft.world.RaycastContext.FluidHandling.NONE, client.player));
+
             if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
                 BlockPos pos = ((BlockHitResult) hit).getBlockPos();
                 if (pos.isWithinDistance(camPos, 20.0)) {

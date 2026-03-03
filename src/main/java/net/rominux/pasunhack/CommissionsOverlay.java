@@ -54,9 +54,21 @@ public class CommissionsOverlay implements HudRenderCallback {
         int linesToRead = 0;
 
         for (PlayerListEntry entry : playerList) {
-            if (entry.getDisplayName() == null)
+            String rawText = "";
+            if (entry.getDisplayName() != null) {
+                rawText = entry.getDisplayName().getString();
+            } else {
+                net.minecraft.scoreboard.Team team = entry.getScoreboardTeam();
+                String prefix = team != null ? team.getPrefix().getString() : "";
+                String suffix = team != null ? team.getSuffix().getString() : "";
+                String name = entry.getProfile() != null ? entry.getProfile().name() : "";
+                rawText = prefix + name + suffix;
+            }
+
+            if (rawText.isEmpty())
                 continue;
-            String cleanText = entry.getDisplayName().getString().replaceAll("§[0-9a-fk-or]", "").trim();
+
+            String cleanText = rawText.replaceAll("§[0-9a-fk-or]", "").trim();
 
             if (foundCommissions) {
                 if (cleanText.isEmpty() || linesToRead <= 0) {
