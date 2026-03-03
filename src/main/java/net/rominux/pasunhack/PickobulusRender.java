@@ -49,10 +49,37 @@ public class PickobulusRender {
         }
 
         if (showWaypoints) {
+            net.minecraft.client.font.TextRenderer textRenderer = client.textRenderer;
+            float scale = 0.025f;
+            net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
+                    .getEntityVertexConsumers();
+
             for (CommissionsOverlay.CommissionWaypoint wp : CommissionsOverlay.waypoints) {
                 Box box = new Box(wp.x - 0.5, wp.y, wp.z - 0.5, wp.x + 0.5, wp.y + 100, wp.z + 0.5)
                         .offset(-camPos.x, -camPos.y, -camPos.z);
                 drawBox(context.matrices(), lineConsumer, box, 1.0f, 0.5f, 0.0f, 0.8f);
+
+                context.matrices().push();
+                context.matrices().translate(wp.x + 0.0 - camPos.x, wp.y + 2.0 - camPos.y, wp.z + 0.0 - camPos.z);
+                context.matrices().multiply(camera.getRotation());
+                context.matrices().scale(-scale, -scale, scale);
+
+                String text = wp.name;
+                float textWidth = (float) -textRenderer.getWidth(text) / 2;
+                org.joml.Matrix4f posMat = context.matrices().peek().getPositionMatrix();
+
+                textRenderer.draw(
+                        net.minecraft.text.Text.literal(text),
+                        textWidth,
+                        0f,
+                        0xFFAA00,
+                        false,
+                        posMat,
+                        immediate,
+                        net.minecraft.client.font.TextRenderer.TextLayerType.SEE_THROUGH,
+                        0x40000000,
+                        0xF000F0);
+                context.matrices().pop();
             }
         }
     }
