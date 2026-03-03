@@ -28,7 +28,6 @@ public class PickobulusRender {
 
         VertexConsumerProvider vertexConsumers = context.consumers() != null ? context.consumers()
                 : client.getBufferBuilders().getEntityVertexConsumers();
-        VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
 
         Item item = client.player.getMainHandStack().getItem();
         if (showPickobulus && (item.toString().contains("pickaxe") || item == Items.PRISMARINE_SHARD)) {
@@ -43,6 +42,7 @@ public class PickobulusRender {
                 if (pos.isWithinDistance(camPos, 20.0)) {
                     Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3,
                             pos.getZ() + 3).offset(-camPos.x, -camPos.y, -camPos.z);
+                    VertexConsumer lineConsumer = vertexConsumers.getBuffer(RenderLayer.getLines());
                     drawBox(context.matrices(), lineConsumer, box, 0.0f, 1.0f, 0.0f, 1.0f);
                 }
             }
@@ -58,6 +58,7 @@ public class PickobulusRender {
                 Box box = new Box(wp.x - 0.5, wp.y, wp.z - 0.5, wp.x + 0.5, wp.y + 100, wp.z + 0.5)
                         .offset(-camPos.x, -camPos.y, -camPos.z);
 
+                VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
                 drawBox(context.matrices(), lineConsumer, box, 1.0f, 0.5f, 0.0f, 0.8f);
 
                 double dist = Math.sqrt((wp.x - camPos.x) * (wp.x - camPos.x) + (wp.y - camPos.y) * (wp.y - camPos.y)
