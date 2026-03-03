@@ -29,6 +29,8 @@ public class PasunhackConfig {
     public boolean showCommissionWaypoints = true;
     public boolean solveFetchur = true;
     public boolean solvePuzzler = true;
+    public boolean titaniumTracer = false;
+    public int titaniumTracerRadius = 30;
 
     private static PasunhackConfig instance;
 

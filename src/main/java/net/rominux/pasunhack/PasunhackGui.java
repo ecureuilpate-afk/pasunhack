@@ -119,12 +119,33 @@ public class PasunhackGui extends Screen {
                                 .dimensions(rX, 165, 130, 20).build());
 
                 this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Titanium Tracer: " + (config.titaniumTracer ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.titaniumTracer = !config.titaniumTracer;
+                                                        btn.setMessage(Text.literal("Titanium Tracer: "
+                                                                        + (config.titaniumTracer ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 190, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Tracer Radius: " + config.titaniumTracerRadius),
+                                                btn -> {
+                                                        config.titaniumTracerRadius += 10;
+                                                        if (config.titaniumTracerRadius > 100)
+                                                                config.titaniumTracerRadius = 10;
+                                                        btn.setMessage(Text.literal("Tracer Radius: "
+                                                                        + config.titaniumTracerRadius));
+                                                })
+                                .dimensions(rX, 215, 130, 20).build());
+
+                this.addDrawableChild(ButtonWidget
                                 .builder(Text.literal("Dump TabList -> Logs"),
                                                 btn -> {
                                                         dumpTablistLogs();
                                                         btn.setMessage(Text.literal("Dumped !"));
                                                 })
-                                .dimensions(rX, 190, 130, 20).build());
+                                .dimensions(rX, 240, 130, 20).build());
 
                 // Block Input Field
                 this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,

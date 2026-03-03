@@ -13,6 +13,7 @@ import java.util.List;
 
 public class CommissionsOverlay implements HudRenderCallback {
     public static final List<CommissionWaypoint> waypoints = new java.util.concurrent.CopyOnWriteArrayList<>();
+    public static final List<String> activeCommissions = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     public static class CommissionWaypoint {
         public String name;
@@ -144,6 +145,9 @@ public class CommissionsOverlay implements HudRenderCallback {
                     y += 10;
                 }
 
+                activeCommissions.clear();
+                activeCommissions.addAll(commissionLines);
+
                 if (PasunhackConfig.getInstance().showCommissionWaypoints) {
                     if (hasCompletedCommission) {
                         waypoints.add(new CommissionWaypoint("Emissary", 58, 198, -8));
@@ -158,47 +162,52 @@ public class CommissionsOverlay implements HudRenderCallback {
 
                     for (String line : commissionLines) {
                         String lowerLine = line.toLowerCase();
+                        String wpName = line;
+                        if (line.contains(":")) {
+                            wpName = line.split(":")[0].trim();
+                        }
+
                         if (lowerLine.contains("upper mines")) {
-                            waypoints.add(new CommissionWaypoint("Upper Mines", -130, 174, -50));
+                            waypoints.add(new CommissionWaypoint(wpName, -130, 174, -50));
                         } else if (lowerLine.contains("royal mines")) {
-                            waypoints.add(new CommissionWaypoint("Royal Mines", 130, 154, 30));
+                            waypoints.add(new CommissionWaypoint(wpName, 130, 154, 30));
                         } else if (lowerLine.contains("lava springs") || lowerLine.contains("lava spring")) {
-                            waypoints.add(new CommissionWaypoint("Lava Springs", 60, 197, -15));
+                            waypoints.add(new CommissionWaypoint(wpName, 60, 197, -15));
                         } else if (lowerLine.contains("rampart's quarry") || lowerLine.contains("ramparts quarry")
                                 || lowerLine.contains("rampart")) {
-                            waypoints.add(new CommissionWaypoint("Rampart's Quarry", -100, 150, -20));
+                            waypoints.add(new CommissionWaypoint(wpName, -100, 150, -20));
                         } else if (lowerLine.contains("cliffside veins")) {
-                            waypoints.add(new CommissionWaypoint("Cliffside Veins", 40, 128, 40));
+                            waypoints.add(new CommissionWaypoint(wpName, 40, 128, 40));
                         } else if (lowerLine.contains("glacite walker")) {
-                            waypoints.add(new CommissionWaypoint("Glacite Walker", 0, 128, 150));
+                            waypoints.add(new CommissionWaypoint(wpName, 0, 128, 150));
                         } else if (lowerLine.contains("aquamarine")) {
-                            waypoints.add(new CommissionWaypoint("Aquamarine", 20, 136, 370));
-                            waypoints.add(new CommissionWaypoint("Aquamarine", -14, 132, 386));
-                            waypoints.add(new CommissionWaypoint("Aquamarine", 6, 137, 411));
-                            waypoints.add(new CommissionWaypoint("Aquamarine", 50, 117, 302));
+                            waypoints.add(new CommissionWaypoint(wpName, 20, 136, 370));
+                            waypoints.add(new CommissionWaypoint(wpName, -14, 132, 386));
+                            waypoints.add(new CommissionWaypoint(wpName, 6, 137, 411));
+                            waypoints.add(new CommissionWaypoint(wpName, 50, 117, 302));
                         } else if (lowerLine.contains("onyx")) {
-                            waypoints.add(new CommissionWaypoint("Onyx", 4, 127, 307));
-                            waypoints.add(new CommissionWaypoint("Onyx", -3, 139, 434));
-                            waypoints.add(new CommissionWaypoint("Onyx", 77, 118, 411));
-                            waypoints.add(new CommissionWaypoint("Onyx", -68, 130, 404));
+                            waypoints.add(new CommissionWaypoint(wpName, 4, 127, 307));
+                            waypoints.add(new CommissionWaypoint(wpName, -3, 139, 434));
+                            waypoints.add(new CommissionWaypoint(wpName, 77, 118, 411));
+                            waypoints.add(new CommissionWaypoint(wpName, -68, 130, 404));
                         } else if (lowerLine.contains("peridot")) {
-                            waypoints.add(new CommissionWaypoint("Peridot", 66, 144, 284));
-                            waypoints.add(new CommissionWaypoint("Peridot", 94, 154, 284));
-                            waypoints.add(new CommissionWaypoint("Peridot", -62, 147, 303));
-                            waypoints.add(new CommissionWaypoint("Peridot", -77, 119, 283));
-                            waypoints.add(new CommissionWaypoint("Peridot", 87, 122, 394));
-                            waypoints.add(new CommissionWaypoint("Peridot", -73, 122, 456));
+                            waypoints.add(new CommissionWaypoint(wpName, 66, 144, 284));
+                            waypoints.add(new CommissionWaypoint(wpName, 94, 154, 284));
+                            waypoints.add(new CommissionWaypoint(wpName, -62, 147, 303));
+                            waypoints.add(new CommissionWaypoint(wpName, -77, 119, 283));
+                            waypoints.add(new CommissionWaypoint(wpName, 87, 122, 394));
+                            waypoints.add(new CommissionWaypoint(wpName, -73, 122, 456));
                         } else if (lowerLine.contains("citrine")) {
-                            waypoints.add(new CommissionWaypoint("Citrine", -86, 143, 261));
-                            waypoints.add(new CommissionWaypoint("Citrine", 74, 150, 327));
-                            waypoints.add(new CommissionWaypoint("Citrine", 63, 137, 343));
-                            waypoints.add(new CommissionWaypoint("Citrine", 38, 119, 386));
-                            waypoints.add(new CommissionWaypoint("Citrine", 55, 150, 400));
-                            waypoints.add(new CommissionWaypoint("Citrine", -45, 127, 415));
-                            waypoints.add(new CommissionWaypoint("Citrine", -60, 144, 424));
-                            waypoints.add(new CommissionWaypoint("Citrine", -54, 132, 410));
+                            waypoints.add(new CommissionWaypoint(wpName, -86, 143, 261));
+                            waypoints.add(new CommissionWaypoint(wpName, 74, 150, 327));
+                            waypoints.add(new CommissionWaypoint(wpName, 63, 137, 343));
+                            waypoints.add(new CommissionWaypoint(wpName, 38, 119, 386));
+                            waypoints.add(new CommissionWaypoint(wpName, 55, 150, 400));
+                            waypoints.add(new CommissionWaypoint(wpName, -45, 127, 415));
+                            waypoints.add(new CommissionWaypoint(wpName, -60, 144, 424));
+                            waypoints.add(new CommissionWaypoint(wpName, -54, 132, 410));
                         } else if (lowerLine.contains("base camp") || lowerLine.contains("campfire")) {
-                            waypoints.add(new CommissionWaypoint("Base Camp", -7, 126, 229));
+                            waypoints.add(new CommissionWaypoint(wpName, -7, 126, 229));
                         }
                     }
                 }

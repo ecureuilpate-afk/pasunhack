@@ -10,8 +10,13 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PickobulusRender {
+    private static List<BlockPos> titaniumBlocks = new ArrayList<>();
+    private static long lastScanTime = 0;
+
     public static void onLast(WorldRenderContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null)
@@ -63,7 +68,7 @@ public class PickobulusRender {
 
                 Vec3d waypointVec3d = new Vec3d(wp.x, wp.y, wp.z);
                 double distance = camPos.distanceTo(waypointVec3d);
-                String label = "§l§n" + wp.name + " §r(§a" + (int) distance + "m)";
+                String label = "§l§n" + wp.name + "§r §a(" + (int) distance + "m)";
 
                 int textColor = 0xFFFFFFFF; // Blanc par défaut (Titanium ou autre)
                 String lowerName = wp.name.toLowerCase();
@@ -114,6 +119,48 @@ public class PickobulusRender {
                 context.matrices().pop();
             }
         }
+
+        if (PasunhackConfig.getInstance().titaniumTracer) {
+            boolean hasTitanium = false;
+            for (String comm : CommissionsOverlay.activeCommissions) {
+                if (comm.toLowerCase().contains("titanium")) {
+                    hasTitanium = true;
+                    break;
+                }
+            }
+            if (hasTitanium) {
+                long time = System.currentTimeMillis();
+                if (time - lastScanTime > 1500) {
+                    lastScanTime = time;
+                    int radius = PasunhackConfig.getInstance().titaniumTracerRadius;
+                    BlockPos playerPos = client.player.getBlockPos();
+                    new Thread(() -> {
+                        try {
+                            List<BlockPos> temp = new ArrayList<>();
+                            for (BlockPos bp : BlockPos.iterate(playerPos.add(-radius, -radius, -radius),
+                                    playerPos.add(radius, radius, radius))) {
+                                if (client.world.getBlockState(bp).isOf(net.minecraft.block.Blocks.POLISHED_DIORITE)) {
+                                    temp.add(bp.toImmutable());
+                                    if (temp.size() > 50)
+                                        break;
+                                }
+                            }
+                            titaniumBlocks = temp;
+                        } catch (Exception ignored) {
+                        }
+                    }).start();
+                }
+
+                net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
+                        .getEntityVertexConsumers();
+                VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
+                for (BlockPos pos : titaniumBlocks) {
+                    Vec3d target = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                    drawTracer(context.matrices(), lineConsumer, camPos, target, 0f, 1f, 1f, 1f); // Cyan
+                }
+                immediate.draw();
+            }
+        }
     }
 
     private static void drawBox(net.minecraft.client.util.math.MatrixStack matrices, VertexConsumer vertexConsumer,
@@ -150,5 +197,15 @@ public class PickobulusRender {
         vertexConsumer.vertex(matrix, maxX, maxY, maxZ).color(r, g, b, a).normal(0, 1, 0);
         vertexConsumer.vertex(matrix, maxX, minY, maxZ).color(r, g, b, a).normal(0, 0, -1);
         vertexConsumer.vertex(matrix, maxX, minY, minZ).color(r, g, b, a).normal(0, 0, -1);
+    }
+
+    private static void drawTracer(net.minecraft.client.util.math.MatrixStack matrices, VertexConsumer vertexConsumer,
+            Vec3d camPos, Vec3d target, float r, float g, float b, float a) {
+        org.joml.Matrix4f matrix = matrices.peek().getPositionMatrix();
+        Vec3d end = target.subtract(camPos);
+        org.joml.Vector3f dir = new org.joml.Vector3f((float) end.x, (float) end.y, (float) end.z).normalize();
+        vertexConsumer.vertex(matrix, 0, 0, 0).color(r, g, b, a).normal(dir.x, dir.y, dir.z);
+        vertexConsumer.vertex(matrix, (float) end.x, (float) end.y, (float) end.z).color(r, g, b, a).normal(dir.x,
+                dir.y, dir.z);
     }
 }
