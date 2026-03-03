@@ -155,13 +155,9 @@ public class AutoMiner {
             Direction side = ((BlockHitResult) hit).getSide();
 
             if (miningStartTime == 0) {
-                client.interactionManager.attackBlock(currentTarget, side);
-                client.player.swingHand(Hand.MAIN_HAND);
                 miningStartTime = System.currentTimeMillis();
-            } else {
-                client.interactionManager.updateBlockBreakingProgress(currentTarget, side);
-                client.player.swingHand(Hand.MAIN_HAND);
             }
+            client.options.attackKey.setPressed(true);
         } else {
             // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
             // tolérance (40 ticks max = 2s)
@@ -174,6 +170,9 @@ public class AutoMiner {
     }
 
     private static void cancelMining(MinecraftClient client) {
+        if (client.options != null) {
+            client.options.attackKey.setPressed(false);
+        }
         if (currentTarget != null && client.interactionManager != null) {
             client.interactionManager.cancelBlockBreaking();
         }
