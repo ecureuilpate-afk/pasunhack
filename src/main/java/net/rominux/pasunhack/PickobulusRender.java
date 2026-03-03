@@ -90,7 +90,7 @@ public class PickobulusRender {
                         label,
                         xOffset,
                         0f,
-                        0xFFFFFF, // Couleur du texte (Blanc)
+                        0xFF000000, // Couleur du texte (Blanc)
                         false, // Pas d'ombre portée classique car on a un background
                         positionMatrix,
                         immediate,
