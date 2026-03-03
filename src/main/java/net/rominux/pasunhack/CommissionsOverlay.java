@@ -61,8 +61,10 @@ public class CommissionsOverlay implements HudRenderCallback {
                     if (matcher.matches()) {
                         String name = matcher.group("name");
                         String progress = matcher.group("progress");
-                        String displayLine = name + ": " + progress + (progress.equals("DONE") ? "" : "%");
-                        commissionLines.add(displayLine);
+                        if (!progress.equals("DONE")) {
+                            String displayLine = name + ": " + progress + "%";
+                            commissionLines.add(displayLine);
+                        }
                     }
                 } else if (string.startsWith("Commissions")) {
                     foundCommissions = true;
