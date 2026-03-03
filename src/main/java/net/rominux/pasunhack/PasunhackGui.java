@@ -8,6 +8,13 @@ import net.minecraft.client.input.KeyInput;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PasunhackGui extends Screen {
 
@@ -18,6 +25,19 @@ public class PasunhackGui extends Screen {
         private ButtonWidget toggleKeyButton;
 
         private boolean isListeningForKey = false;
+
+        private static class SearchResult {
+                Block block;
+                ButtonWidget button;
+
+                SearchResult(Block block, ButtonWidget button) {
+                        this.block = block;
+                        this.button = button;
+                }
+        }
+
+        private final List<SearchResult> searchResults = new ArrayList<>();
+        private final List<ButtonWidget> removeButtons = new ArrayList<>();
 
         public PasunhackGui(Screen parent) {
                 super(Text.literal("Configuration Pasunhack"));
@@ -40,34 +60,15 @@ public class PasunhackGui extends Screen {
                 this.addDrawableChild(this.toggleKeyButton);
 
                 // Block Input Field
-                this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 140, 20,
-                                Text.literal("ID du bloc"));
+                this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,
+                                Text.literal("Chercher un bloc..."));
                 this.blockInputField.setMaxLength(100);
+                this.blockInputField.setChangedListener(this::updateSearchResults);
                 this.addDrawableChild(this.blockInputField);
 
-                // Add Block Button
-                ButtonWidget addBlockButton = ButtonWidget.builder(Text.literal("Ajouter"), button -> {
-                        String blockId = this.blockInputField.getText();
-                        if (!blockId.isEmpty() && !this.config.blocksToMine.contains(blockId)) {
-                                this.config.blocksToMine.add(blockId);
-                                this.blockInputField.setText("");
-                                this.init(); // Refresh UI to show the new block
-                        }
-                }).dimensions(centerX + 45, 80, 55, 20).build();
-                this.addDrawableChild(addBlockButton);
-
-                // List of blocks to remove
-                int listY = 110;
-                int index = 0;
-                for (String block : this.config.blocksToMine) {
-                        final String b = block;
-                        ButtonWidget removeBtn = ButtonWidget.builder(Text.literal("§c[X] §r" + block), button -> {
-                                this.config.blocksToMine.remove(b);
-                                this.init(); // Refresh UI
-                        }).dimensions(centerX - 100, listY + (index * 24), 200, 20).build();
-                        this.addDrawableChild(removeBtn);
-                        index++;
-                }
+                this.searchResults.clear();
+                this.removeButtons.clear();
+                updateSearchResults("");
 
                 // Save & Quit
                 ButtonWidget saveAndQuit = ButtonWidget.builder(Text.literal("Sauvegarder et Quitter"), button -> {
@@ -82,6 +83,12 @@ public class PasunhackGui extends Screen {
                 context.fill(0, 0, this.width, this.height, 0x90000000);
                 context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 0xFFFFFF);
                 super.render(context, mouseX, mouseY, delta);
+
+                for (SearchResult res : this.searchResults) {
+                        int x = res.button.getX() + 4;
+                        int y = res.button.getY() + 2;
+                        context.drawItem(new ItemStack(res.block), x, y);
+                }
         }
 
         @Override
@@ -113,5 +120,70 @@ public class PasunhackGui extends Screen {
         public void close() {
                 PasunhackConfig.save();
                 this.client.setScreen(this.parent);
+        }
+
+        private void updateSearchResults(String query) {
+                for (SearchResult res : this.searchResults) {
+                        this.remove(res.button);
+                }
+                this.searchResults.clear();
+
+                for (ButtonWidget btn : this.removeButtons) {
+                        this.remove(btn);
+                }
+                this.removeButtons.clear();
+
+                int centerX = this.width / 2;
+
+                if (query.isEmpty()) {
+                        int listY = 110;
+                        int index = 0;
+                        for (String block : this.config.blocksToMine) {
+                                final String b = block;
+                                ButtonWidget removeBtn = ButtonWidget
+                                                .builder(Text.literal("§c[X] §r" + block), button -> {
+                                                        this.config.blocksToMine.remove(b);
+                                                        this.init();
+                                                }).dimensions(centerX - 100, listY + (index * 24), 200, 20).build();
+                                this.addDrawableChild(removeBtn);
+                                this.removeButtons.add(removeBtn);
+                                index++;
+                        }
+                } else {
+                        String lowerQuery = query.toLowerCase();
+                        List<Block> matches = Registries.BLOCK.stream()
+                                        .filter(b -> {
+                                                Identifier id = Registries.BLOCK.getId(b);
+                                                return id.getPath().contains(lowerQuery)
+                                                                || id.toString().contains(lowerQuery)
+                                                                || b.getName().getString().toLowerCase()
+                                                                                .contains(lowerQuery);
+                                        })
+                                        .limit(5)
+                                        .collect(Collectors.toList());
+
+                        int btnY = 110;
+                        for (Block block : matches) {
+                                String name = block.getName().getString();
+                                Identifier id = Registries.BLOCK.getId(block);
+
+                                ButtonWidget btn = ButtonWidget
+                                                .builder(Text.literal("    " + name + " (" + id.getPath() + ")"),
+                                                                button -> {
+                                                                        String fullId = id.toString();
+                                                                        if (!this.config.blocksToMine
+                                                                                        .contains(fullId)) {
+                                                                                this.config.blocksToMine.add(fullId);
+                                                                                this.blockInputField.setText("");
+                                                                                this.init();
+                                                                        }
+                                                                })
+                                                .dimensions(centerX - 100, btnY, 200, 20).build();
+
+                                this.addDrawableChild(btn);
+                                this.searchResults.add(new SearchResult(block, btn));
+                                btnY += 24;
+                        }
+                }
         }
 }

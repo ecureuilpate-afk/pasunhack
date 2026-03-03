@@ -104,8 +104,7 @@ public class AutoMiner {
             Vec3d targetCenter = Vec3d.ofCenter(bestTarget);
             Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
 
-            client.player.setYaw(angle.x);
-            client.player.setPitch(angle.y);
+            smoothLook(client, angle);
 
             currentTarget = bestTarget;
             aimWaitTicks = 0; // Réinitialise les Ticks d'attente pour le Raycast
@@ -117,8 +116,7 @@ public class AutoMiner {
         if (currentTarget != null && client.player != null) {
             Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
             Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
-            client.player.setYaw(angle.x);
-            client.player.setPitch(angle.y);
+            smoothLook(client, angle);
         }
 
         // Vérification immédiate que le bloc est toujours le bon (au cas où il est
@@ -147,9 +145,9 @@ public class AutoMiner {
             }
         } else {
             // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
-            // tolérance (20 ticks max = 1s)
+            // tolérance (40 ticks max = 2s)
             aimWaitTicks++;
-            if (aimWaitTicks > 20) {
+            if (aimWaitTicks > 40) {
                 BLACKLIST_TEMP.add(currentTarget);
                 cancelMining(client);
             }
@@ -189,6 +187,19 @@ public class AutoMiner {
         float pitch = (float) -Math.toDegrees(Math.atan2(dy, dist));
         float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90.0F;
         return new Vec2f(yaw, pitch);
+    }
+
+    private static void smoothLook(MinecraftClient client, Vec2f targetAngle) {
+        if (client.player == null)
+            return;
+        float currentYaw = client.player.getYaw();
+        float currentPitch = client.player.getPitch();
+
+        float newYaw = MathHelper.lerpAngleDegrees(0.15f, currentYaw, targetAngle.x);
+        float newPitch = MathHelper.lerpAngleDegrees(0.15f, currentPitch, targetAngle.y);
+
+        client.player.setYaw(newYaw);
+        client.player.setPitch(newPitch);
     }
 
     public static double getAngleDistance(float yaw1, float pitch1, float yaw2, float pitch2) {
