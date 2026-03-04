@@ -157,13 +157,18 @@ public class PickobulusRender {
                             List<BlockPos> temp = new ArrayList<>();
                             for (BlockPos bp : BlockPos.iterate(playerPos.add(-radius, -radius, -radius),
                                     playerPos.add(radius, radius, radius))) {
-                                if (client.world.getBlockState(bp).isOf(net.minecraft.block.Blocks.POLISHED_DIORITE)) {
+                                net.minecraft.block.Block block = client.world.getBlockState(bp).getBlock();
+                                if (block == net.minecraft.block.Blocks.POLISHED_DIORITE
+                                        || block == net.minecraft.block.Blocks.END_STONE) {
                                     temp.add(bp.toImmutable());
-                                    if (temp.size() > 50)
-                                        break;
                                 }
                             }
-                            titaniumBlocks = temp;
+                            if (!temp.isEmpty()) {
+                                temp.sort(java.util.Comparator.comparingDouble(p -> p.getSquaredDistance(playerPos)));
+                                titaniumBlocks = java.util.Collections.singletonList(temp.get(0));
+                            } else {
+                                titaniumBlocks = new ArrayList<>();
+                            }
                         } catch (Exception ignored) {
                         }
                     }).start();
@@ -174,7 +179,7 @@ public class PickobulusRender {
                 VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
                 for (BlockPos pos : titaniumBlocks) {
                     Vec3d target = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                    drawTracer(context.matrices(), lineConsumer, camPos, target, 0f, 1f, 1f, 1f); // Cyan
+                    drawTracer(context.matrices(), lineConsumer, camPos, target, 1f, 1f, 1f, 1f); // White
                 }
                 immediate.draw();
             }

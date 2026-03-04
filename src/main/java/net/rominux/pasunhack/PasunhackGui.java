@@ -38,6 +38,7 @@ public class PasunhackGui extends Screen {
 
         private final List<SearchResult> searchResults = new ArrayList<>();
         private final List<ButtonWidget> removeButtons = new ArrayList<>();
+        private double scrollOffset = 0;
 
         public PasunhackGui(Screen parent) {
                 super(Text.literal("Configuration Pasunhack"));
@@ -128,21 +129,24 @@ public class PasunhackGui extends Screen {
                                                 })
                                 .dimensions(rX, 190, 130, 20).build());
 
-                this.addDrawableChild(ButtonWidget
-                                .builder(Text.literal("Tracer Radius: " + config.titaniumTracerRadius),
-                                                btn -> {
-                                                        config.titaniumTracerRadius += 10;
-                                                        if (config.titaniumTracerRadius > 100)
-                                                                config.titaniumTracerRadius = 10;
-                                                        btn.setMessage(Text.literal("Tracer Radius: "
-                                                                        + config.titaniumTracerRadius));
-                                                })
-                                .dimensions(rX, 215, 130, 20).build());
+                this.addDrawableChild(new net.minecraft.client.gui.widget.SliderWidget(
+                                rX, 215, 130, 20, Text.literal("Tracer Radius: " + config.titaniumTracerRadius),
+                                config.titaniumTracerRadius / 100.0) {
+                        @Override
+                        protected void updateMessage() {
+                                this.setMessage(Text.literal("Tracer Radius: " + config.titaniumTracerRadius));
+                        }
+
+                        @Override
+                        protected void applyValue() {
+                                config.titaniumTracerRadius = (int) (this.value * 100);
+                        }
+                });
 
                 this.addDrawableChild(ButtonWidget
-                                .builder(Text.literal("Dump TabList -> Logs"),
+                                .builder(Text.literal("Dump Full Logs"),
                                                 btn -> {
-                                                        dumpTablistLogs();
+                                                        dumpLogs();
                                                         btn.setMessage(Text.literal("Dumped !"));
                                                 })
                                 .dimensions(rX, 240, 130, 20).build());
@@ -180,7 +184,7 @@ public class PasunhackGui extends Screen {
 
                 if (this.blockInputField.getText().isEmpty()) {
                         int centerX = this.width / 2;
-                        int listY = 110;
+                        int listY = 110 + (int) this.scrollOffset;
                         int index = 0;
                         for (String blockId : this.config.blocksToMine) {
                                 try {
@@ -192,11 +196,19 @@ public class PasunhackGui extends Screen {
                                                 context.drawItem(new ItemStack(b), x, y);
                                         }
                                 } catch (Exception e) {
-                                        // Ignore if blockId is malformed
                                 }
                                 index++;
                         }
                 }
+        }
+
+        @Override
+        public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+                this.scrollOffset += verticalAmount * 24;
+                if (this.scrollOffset > 0)
+                        this.scrollOffset = 0;
+                this.updateSearchResults(this.blockInputField.getText());
+                return true;
         }
 
         @Override
@@ -244,7 +256,7 @@ public class PasunhackGui extends Screen {
                 int centerX = this.width / 2;
 
                 if (query.isEmpty()) {
-                        int listY = 110;
+                        int listY = 110 + (int) this.scrollOffset;
                         int index = 0;
                         for (String block : this.config.blocksToMine) {
                                 final String b = block;
@@ -270,7 +282,7 @@ public class PasunhackGui extends Screen {
                                         .limit(5)
                                         .collect(Collectors.toList());
 
-                        int btnY = 110;
+                        int btnY = 110 + (int) this.scrollOffset;
                         for (Block block : matches) {
                                 String name = block.getName().getString();
                                 Identifier id = Registries.BLOCK.getId(block);
@@ -295,79 +307,82 @@ public class PasunhackGui extends Screen {
                 }
         }
 
-        private void dumpTablistLogs() {
+        private void dumpLogs() {
                 if (this.client == null || this.client.player == null)
                         return;
+                try {
+                        String baseDir = "C:\\Users\\Omain\\Desktop\\meincrac\\pasunhack-template-1.21.10\\log\\";
+                        java.nio.file.Files.createDirectories(java.nio.file.Paths.get(baseDir));
 
-                String basePath = "C:\\Users\\Omain\\Desktop\\meincrac\\";
-
-                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log1.txt")) {
-                        writer.write("--- LOG 1 : PlayerListNetwork ---\n");
-                        for (net.minecraft.client.network.PlayerListEntry entry : this.client.player.networkHandler
-                                        .getPlayerList()) {
-                                String name = entry.getProfile() != null ? entry.getProfile().name() : "null";
-                                net.minecraft.text.Text displayNameObj = entry.getDisplayName();
-                                String displayName = displayNameObj != null ? displayNameObj.getString() : "null";
-
-                                net.minecraft.scoreboard.Team team = entry.getScoreboardTeam();
-                                String teamName = team != null ? team.getName() : "null";
-                                String prefix = team != null ? team.getPrefix().getString() : "";
-                                String suffix = team != null ? team.getSuffix().getString() : "";
-
-                                writer.write("ProfileName: " + name + " | DisplayName: " + displayName + " | TeamName: "
-                                                + teamName + " | Prefix: " + prefix + " | Suffix: " + suffix + "\n");
-                        }
-                } catch (Exception e) {
-                }
-
-                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log2.txt")) {
-                        writer.write("--- LOG 2 : Scoreboard Teams ---\n");
-                        net.minecraft.scoreboard.Scoreboard scoreboard = this.client.world.getScoreboard();
-                        if (scoreboard != null) {
-                                for (net.minecraft.scoreboard.Team team : scoreboard.getTeams()) {
-                                        String prefix = team.getPrefix().getString();
-                                        String suffix = team.getSuffix().getString();
-                                        writer.write("Team: " + team.getName() + " | Prefix: " + prefix + " | Suffix: "
-                                                        + suffix + " | Assigned Players: " + team.getPlayerList()
-                                                        + "\n");
+                        // Scoreboard.txt
+                        try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "Scoreboard.txt")) {
+                                net.minecraft.scoreboard.Scoreboard sb = this.client.world.getScoreboard();
+                                for (net.minecraft.scoreboard.Team t : sb.getTeams()) {
+                                        fw.write("Team: " + t.getName() + " | Prefix: " + t.getPrefix().getString()
+                                                        + " | Suffix: " + t.getSuffix().getString() + " | Players: "
+                                                        + t.getPlayerList() + "\n");
                                 }
                         }
-                } catch (Exception e) {
-                }
 
-                try (java.io.FileWriter writer = new java.io.FileWriter(basePath + "log3.txt")) {
-                        writer.write("--- LOG 3 : Scoreboard Sidebar Objectives & All Objectives ---\n");
-                        net.minecraft.scoreboard.Scoreboard scoreboard = this.client.world.getScoreboard();
-                        if (scoreboard != null) {
-                                net.minecraft.scoreboard.ScoreboardObjective objective = scoreboard.getObjectiveForSlot(
-                                                net.minecraft.scoreboard.ScoreboardDisplaySlot.SIDEBAR);
-                                if (objective != null) {
-                                        writer.write("Sidebar Objective: " + objective.getName() + "\n");
-                                        for (net.minecraft.scoreboard.ScoreboardEntry entry : scoreboard
-                                                        .getScoreboardEntries(objective)) {
-                                                String owner = entry.owner();
-                                                net.minecraft.scoreboard.Team team = scoreboard
-                                                                .getScoreHolderTeam(owner);
-                                                String prefix = team != null ? team.getPrefix().getString() : "";
-                                                String suffix = team != null ? team.getSuffix().getString() : "";
-                                                writer.write("  Owner: " + owner + " | Score=" + entry.value()
-                                                                + " | Prefix=" + prefix + " | Suffix=" + suffix + "\n");
-                                        }
-                                } else {
-                                        writer.write("NO SIDEBAR OBJECTIVE FOUND\n");
+                        // Tab.txt
+                        try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "Tab.txt")) {
+                                for (net.minecraft.client.network.PlayerListEntry e : this.client.player.networkHandler
+                                                .getPlayerList()) {
+                                        String raw = e.getDisplayName() != null ? e.getDisplayName().getString()
+                                                        : e.getProfile().name();
+                                        fw.write("Raw/Clean: " + raw + "\n");
                                 }
+                        }
 
-                                writer.write("\n--- ALL OBJECTIVES ---\n");
-                                for (net.minecraft.scoreboard.ScoreboardObjective obj : scoreboard.getObjectives()) {
-                                        writer.write("Obj: " + obj.getName() + "\n");
-                                        for (net.minecraft.scoreboard.ScoreboardEntry entry : scoreboard
-                                                        .getScoreboardEntries(obj)) {
-                                                writer.write("  Owner: " + entry.owner() + " = " + entry.value()
-                                                                + "\n");
+                        // ChatHistory.txt
+                        try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "ChatHistory.txt")) {
+                                for (String msg : this.client.inGameHud.getChatHud().getMessageHistory()) {
+                                        fw.write(msg + "\n");
+                                }
+                        }
+
+                        // Entity.json
+                        try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "Entity.json")) {
+                                fw.write("[\n");
+                                boolean first = true;
+                                for (net.minecraft.entity.Entity e : this.client.world.getEntities()) {
+                                        if (e.squaredDistanceTo(this.client.player) < 100 * 100) {
+                                                if (!first)
+                                                        fw.write(",\n");
+                                                first = false;
+                                                fw.write("  { \"type\": \"" + e.getType().getUntranslatedName()
+                                                                + "\", \"uuid\": \"" + e.getUuidAsString()
+                                                                + "\", \"name\": \""
+                                                                + e.getName().getString().replace("\"", "\\\"")
+                                                                + "\", \"x\": " + e.getX() + ", \"y\": " + e.getY()
+                                                                + ", \"z\": " + e.getZ() + " }");
                                         }
                                 }
+                                fw.write("\n]\n");
+                        }
+
+                        // inventaire.json
+                        try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "inventaire.json")) {
+                                fw.write("[\n");
+                                boolean first = true;
+                                for (int i = 0; i < this.client.player.getInventory().size(); i++) {
+                                        net.minecraft.item.ItemStack stack = this.client.player.getInventory()
+                                                        .getStack(i);
+                                        if (!stack.isEmpty()) {
+                                                if (!first)
+                                                        fw.write(",\n");
+                                                first = false;
+                                                String comps = stack.getComponents().toString().replace("\"", "\\\"");
+                                                fw.write("  { \"slot\": " + i + ", \"item\": \""
+                                                                + Registries.ITEM.getId(stack.getItem())
+                                                                + "\", \"count\": " + stack.getCount()
+                                                                + ", \"components\": \"" + comps + "\" }");
+                                        }
+                                }
+                                fw.write("\n]\n");
                         }
                 } catch (Exception e) {
+                        e.printStackTrace();
                 }
         }
 }

@@ -94,7 +94,8 @@ public class CommissionsOverlay implements HudRenderCallback {
                         // Track completed commissions
                         if (progress.equalsIgnoreCase("DONE")) {
                             hasCompletedCommission = true;
-                        } else if (!progress.isEmpty() && !progress.equalsIgnoreCase("DONE")) {
+                            commissionLines.add(name + ": DONE");
+                        } else if (!progress.isEmpty()) {
                             commissionLines.add(name + ": " + progress);
                         }
                     }
@@ -140,6 +141,9 @@ public class CommissionsOverlay implements HudRenderCallback {
                         color = 0xFF55FF55; // Light green for area
                     else if (line.equals("\u00A7lCommissions"))
                         color = 0xFFFFAA00; // Orange for Commissions title
+                    else if (line.endsWith(" DONE")) {
+                        line = "\u00A7a\u00A7l" + line;
+                    }
 
                     context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, color);
                     y += 10;

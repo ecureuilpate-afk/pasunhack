@@ -20,6 +20,7 @@ public class AutoMiner {
     private static long miningStartTime = 0;
     private static Vec3d lastPlayerPos = null;
     private static int aimWaitTicks = 0;
+    private static int stuckTicks = 0;
 
     public static Vec3d precisionTarget = null;
     public static BlockPos currentTarget = null;
@@ -69,80 +70,96 @@ public class AutoMiner {
     }
 
     private static void findAndAimBestTarget(MinecraftClient client) {
-        BlockPos bestTarget = null;
-        double minAngleDist = Double.MAX_VALUE;
         int r = 5;
         BlockPos playerPos = client.player.getBlockPos();
         Vec3d currentPos = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ());
 
-        Set<Block> whitelist = getWhitelistedBlocks();
+        // Iterate through requested blocks IN ORDER of priority
+        for (String id : PasunhackConfig.getInstance().blocksToMine) {
+            Block targetBlock = null;
+            try {
+                Identifier identifier = Identifier.of(id);
+                if (identifier != null && Registries.BLOCK.containsId(identifier)) {
+                    targetBlock = Registries.BLOCK.get(identifier);
+                }
+            } catch (Throwable t) {
+            }
 
-        for (int x = -r; x <= r; x++) {
-            for (int y = -r; y <= r; y++) {
-                for (int z = -r; z <= r; z++) {
-                    BlockPos pos = playerPos.add(x, y, z);
+            if (targetBlock == null)
+                continue;
 
-                    if (pos.toCenterPos().squaredDistanceTo(currentPos) > 4.5 * 4.5)
-                        continue;
-                    if (BLACKLIST_TEMP.contains(pos))
-                        continue;
+            BlockPos bestTarget = null;
+            double minAngleDist = Double.MAX_VALUE;
 
-                    Block block = client.world.getBlockState(pos).getBlock();
+            for (int x = -r; x <= r; x++) {
+                for (int y = -r; y <= r; y++) {
+                    for (int z = -r; z <= r; z++) {
+                        BlockPos pos = playerPos.add(x, y, z);
 
-                    if (whitelist.contains(block)) {
-                        Vec3d targetCenter = Vec3d.ofCenter(pos);
-                        Vec3d[] pointsToTest = {
-                                targetCenter,
-                                targetCenter.add(0.45, 0, 0),
-                                targetCenter.add(-0.45, 0, 0),
-                                targetCenter.add(0, 0.45, 0),
-                                targetCenter.add(0, -0.45, 0),
-                                targetCenter.add(0, 0, 0.45),
-                                targetCenter.add(0, 0, -0.45)
-                        };
-
-                        Vec3d validPoint = null;
-                        for (Vec3d p : pointsToTest) {
-                            BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
-                                    client.player.getEyePos(),
-                                    p,
-                                    RaycastContext.ShapeType.COLLIDER,
-                                    RaycastContext.FluidHandling.NONE,
-                                    client.player));
-
-                            if (sightCheck.getType() == HitResult.Type.MISS || sightCheck.getBlockPos().equals(pos)) {
-                                validPoint = p;
-                                break;
-                            }
-                        }
-
-                        if (validPoint == null) {
+                        if (pos.toCenterPos().squaredDistanceTo(currentPos) > 4.5 * 4.5)
                             continue;
-                        }
+                        if (BLACKLIST_TEMP.contains(pos))
+                            continue;
 
-                        Vec2f targetAngle = getYawPitch(client.player.getEyePos(), validPoint);
-                        double angleDist = getAngleDistance(client.player.getYaw(), client.player.getPitch(),
-                                targetAngle.x, targetAngle.y);
+                        Block block = client.world.getBlockState(pos).getBlock();
 
-                        // On trouve la cible demandant le minimum d'effort de rotation
-                        if (angleDist < minAngleDist) {
-                            minAngleDist = angleDist;
-                            bestTarget = pos;
+                        if (block == targetBlock) {
+                            Vec3d targetCenter = Vec3d.ofCenter(pos);
+                            Vec3d[] pointsToTest = {
+                                    targetCenter,
+                                    targetCenter.add(0.45, 0, 0),
+                                    targetCenter.add(-0.45, 0, 0),
+                                    targetCenter.add(0, 0.45, 0),
+                                    targetCenter.add(0, -0.45, 0),
+                                    targetCenter.add(0, 0, 0.45),
+                                    targetCenter.add(0, 0, -0.45)
+                            };
+
+                            Vec3d validPoint = null;
+                            for (Vec3d p : pointsToTest) {
+                                BlockHitResult sightCheck = client.world.raycast(new RaycastContext(
+                                        client.player.getEyePos(),
+                                        p,
+                                        RaycastContext.ShapeType.COLLIDER,
+                                        RaycastContext.FluidHandling.NONE,
+                                        client.player));
+
+                                if (sightCheck.getType() == HitResult.Type.MISS
+                                        || sightCheck.getBlockPos().equals(pos)) {
+                                    validPoint = p;
+                                    break;
+                                }
+                            }
+
+                            if (validPoint == null) {
+                                continue;
+                            }
+
+                            Vec2f targetAngle = getYawPitch(client.player.getEyePos(), validPoint);
+                            double angleDist = getAngleDistance(client.player.getYaw(), client.player.getPitch(),
+                                    targetAngle.x, targetAngle.y);
+
+                            if (angleDist < minAngleDist) {
+                                minAngleDist = angleDist;
+                                bestTarget = pos;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (bestTarget != null) {
-            Vec3d targetCenter = Vec3d.ofCenter(bestTarget);
-            Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
+            if (bestTarget != null) {
+                Vec3d targetCenter = Vec3d.ofCenter(bestTarget);
+                Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
 
-            smoothLook(client, angle);
+                smoothLook(client, angle);
 
-            currentTarget = bestTarget;
-            precisionTarget = null;
-            aimWaitTicks = 0; // Réinitialise les Ticks d'attente pour le Raycast
+                currentTarget = bestTarget;
+                precisionTarget = null;
+                aimWaitTicks = 0;
+                stuckTicks = 0;
+                return; // Priority matched!
+            }
         }
     }
 
@@ -180,6 +197,13 @@ public class AutoMiner {
                 miningStartTime = System.currentTimeMillis();
             }
             client.options.attackKey.setPressed(true);
+
+            // Increment stuck checks to abandon block quicker if it gets stuck
+            stuckTicks++;
+            if (stuckTicks > 80) { // 4 seconds stuck aim
+                BLACKLIST_TEMP.add(currentTarget);
+                cancelMining(client);
+            }
         } else {
             // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
             // tolérance (40 ticks max = 2s)
@@ -202,6 +226,7 @@ public class AutoMiner {
         precisionTarget = null;
         miningStartTime = 0;
         aimWaitTicks = 0;
+        stuckTicks = 0;
     }
 
     // Récupère dynamiquement les blocks depuis la configuration (GUI)
