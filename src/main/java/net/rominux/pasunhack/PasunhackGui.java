@@ -151,6 +151,16 @@ public class PasunhackGui extends Screen {
                                                 })
                                 .dimensions(rX, 240, 130, 20).build());
 
+                this.addDrawableChild(ButtonWidget
+                                .builder(Text.literal("Crystal ESP: " + (config.crystalHollowsChestEsp ? "ON" : "OFF")),
+                                                btn -> {
+                                                        config.crystalHollowsChestEsp = !config.crystalHollowsChestEsp;
+                                                        btn.setMessage(Text.literal("Crystal ESP: "
+                                                                        + (config.crystalHollowsChestEsp ? "ON"
+                                                                                        : "OFF")));
+                                                })
+                                .dimensions(rX, 265, 130, 20).build());
+
                 // Block Input Field
                 this.blockInputField = new TextFieldWidget(this.textRenderer, centerX - 100, 80, 200, 20,
                                 Text.literal("Chercher un bloc..."));

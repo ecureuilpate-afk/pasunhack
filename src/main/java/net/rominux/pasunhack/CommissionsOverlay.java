@@ -15,6 +15,7 @@ public class CommissionsOverlay implements HudRenderCallback {
     public static final List<CommissionWaypoint> waypoints = new java.util.concurrent.CopyOnWriteArrayList<>();
     public static final List<String> activeCommissions = new java.util.concurrent.CopyOnWriteArrayList<>();
     public static boolean isPickobulusAvailable = false;
+    public static boolean isInDwarvenMines = true;
 
     public static class CommissionWaypoint {
         public String name;
@@ -57,6 +58,7 @@ public class CommissionsOverlay implements HudRenderCallback {
 
             String areaName = "";
             String mithrilPowder = "";
+            String gemstonePowder = "";
             String pickobulusStatus = "";
 
             boolean hasCompletedCommission = false;
@@ -69,6 +71,8 @@ public class CommissionsOverlay implements HudRenderCallback {
                     areaName = string.substring(6).trim();
                 } else if (string.startsWith("Mithril: ")) {
                     mithrilPowder = string.substring(9).trim();
+                } else if (string.startsWith("Gemstone: ")) {
+                    gemstonePowder = string.substring(10).trim();
                 } else if (string.startsWith("Pickobulus: ")) {
                     pickobulusStatus = string.substring(12).trim();
                 }
@@ -103,11 +107,20 @@ public class CommissionsOverlay implements HudRenderCallback {
                 }
             }
 
+            // Zone detection logic for rendering waypoints
+            if (areaName.contains("Crystal Hollows")) {
+                isInDwarvenMines = false;
+            } else if (areaName.contains("Dwarven Mines")) {
+                isInDwarvenMines = true;
+            }
+
             List<String> displayLines = new ArrayList<>();
             if (!areaName.isEmpty())
                 displayLines.add("\u00A7l" + areaName);
             if (!mithrilPowder.isEmpty())
                 displayLines.add("Mithril: " + mithrilPowder);
+            if (!gemstonePowder.isEmpty())
+                displayLines.add("\u00A7dGemstone: " + gemstonePowder);
             if (!pickobulusStatus.isEmpty()) {
                 if (pickobulusStatus.contains("Available") || pickobulusStatus.contains("Prêt")) {
                     isPickobulusAvailable = true;

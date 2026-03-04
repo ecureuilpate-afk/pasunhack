@@ -1,0 +1,11 @@
+[
+  { "type": "player", "uuid": "e28ca86a-b5c9-43cf-ad5e-237965587d3b", "name": "BazookaDeCaca", "x": 239.76249998807907, "y": 126.0, "z": 631.5013093191637 },
+  { "type": "zombie", "uuid": "a18a1095-b8fb-5280-8093-82ab28b3e367", "name": "Zombie", "x": 240.014892578125, "y": 126.0, "z": 629.91748046875 },
+  { "type": "armor_stand", "uuid": "ef47da78-f88f-eb8f-64d1-2e1b24a4f957", "name": "Armor Stand", "x": 240.0224609375, "y": 124.5, "z": 629.91064453125 },
+  { "type": "experience_orb", "uuid": "61d5a72b-1a56-559d-5355-14220803d947", "name": "Experience Orb", "x": 216.99242289460173, "y": 65.0, "z": 617.5743261758709 },
+  { "type": "player", "uuid": "a1e9778f-1dce-2c1b-8bf8-974d3986fb77", "name": "Weakling ", "x": 272.5, "y": 126.0, "z": 660.5 },
+  { "type": "player", "uuid": "a0f1e7aa-7301-2b61-bceb-269fe1b6efa9", "name": "Weakling ", "x": 209.407958984375, "y": 126.0, "z": 600.824951171875 },
+  { "type": "player", "uuid": "9393f298-d4e3-2aad-b622-8f62abd35145", "name": "Weakling ", "x": 210.65625, "y": 126.0, "z": 592.75 },
+  { "type": "player", "uuid": "d617c83c-fcf3-204b-b596-55289b407f0d", "name": "Weakling ", "x": 206.5, "y": 126.0, "z": 603.5 },
+  { "type": "armor_stand", "uuid": "e4b3356a-475e-baff-c0a0-29653d992798", "name": "[Lv22] Armadillo", "x": 240.0224609375, "y": 126.5, "z": 629.91064453125 }
+]

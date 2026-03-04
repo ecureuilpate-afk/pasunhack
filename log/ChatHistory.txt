@@ -1,0 +1,582 @@
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-13/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDVjYTVlODVjNGFlYTYwOGJkMzQ0M2NhYmRmMWMyYmRkZTNiNDMxYWQzYWEzOGZmZmUwNGEzMmViN2U1MjUifX19, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-2/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmNlYjU0MDEwNGU3YmJmM2QxM2YxNTI1YWNiNzEwZTNhZDM2NWQwY2IxMjkxYWQxZjc0OGY2MDJiNzdkMyJ9fX0=, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-4/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWUyNTk2MmJlN2M5ZWYzNGE5YmI0NDQ3MmZhZjI2NTkzMTIyYjM3N2IyNzU2ODFhOTQ5MWE4Y2IxOGE1NTY3In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-4/WARN]: Profile contained invalid signature for textures property (profile id: f65809f9-952a-46e9-9946-7637472d131d)
+[18:37:02] [Worker-Main-11/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWIyZjZmYWYxYjk5YWMzOGQ1MmIxYzdiYzQ5ZWI3OTFjNjcwNTQzMzdkNDRkODNkNjZhZGVjYjUwZjM3NSJ9fX0=, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-2/WARN]: Profile contained invalid signature for textures property (profile id: d817b241-a560-4be0-ab43-075654ad9d76)
+[18:37:02] [Worker-Main-13/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDVjYTVlODVjNGFlYTYwOGJkMzQ0M2NhYmRmMWMyYmRkZTNiNDMxYWQzYWEzOGZmZmUwNGEzMmViN2U1MjUifX19, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:02] [Worker-Main-11/WARN]: Profile contained invalid signature for textures property (profile id: bfbe5ef0-811d-46e0-a741-3ba5a3331ec6)
+[18:37:02] [Worker-Main-13/WARN]: Profile contained invalid signature for textures property (profile id: 2be15332-4c52-44e8-b0ea-e0f7c01363ad)
+[18:37:04] [Render thread/INFO]: [System] [CHAT] [219] §a[VIP] dangerousman15§f: in this lobby
+[18:37:08] [Render thread/INFO]: [System] [CHAT] [Sacks] +2 items. (Last 8s.)
+[18:37:15] [Render thread/INFO]: [System] [CHAT]  
+[18:37:15] [Render thread/INFO]: [System] [CHAT] §f                 §7You have §3669 §7materials stashed away!
+[18:37:15] [Render thread/INFO]: [System] [CHAT] §f              §8(This totals 2 types of materials stashed!)
+[18:37:15] [Render thread/INFO]: [System] [CHAT] §f                §3§l>>> §3§lCLICK HERE§b to pick them up! §3§l<<<
+[18:37:15] [Render thread/INFO]: [System] [CHAT]   
+[18:37:15] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:37:32] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:37:32] [Render thread/INFO]: [System] [CHAT]   CHEST LOCKPICKED 
+[18:37:32] [Render thread/INFO]: [System] [CHAT] 
+[18:37:32] [Render thread/INFO]: [System] [CHAT]   REWARDS
+[18:37:32] [Render thread/INFO]: [System] [CHAT]     Gemstone Powder x2,019
+[18:37:32] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:37:39] [Render thread/WARN]: Requested creation of existing team 'fkt_Goblin '
+[18:37:39] [Render thread/INFO]: [System] [CHAT] A Golden Goblin has spawned!
+[18:37:40] [Worker-Main-3/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzU3YjhhY2QxNDViZDNkZmIxZGI5NGJkYmVkNDU4ZmUxODQ2YTljODg0ODIyY2EzY2U4MWE0Y2Y4MCJ9fX0=, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:40] [Worker-Main-3/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzU3YjhhY2QxNDViZDNkZmIxZGI5NGJkYmVkNDU4ZmUxODQ2YTljODg0ODIyY2EzY2U4MWE0Y2Y4MCJ9fX0=, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:40] [Worker-Main-3/WARN]: Profile contained invalid signature for textures property (profile id: 385a363e-14f3-4d35-9ed6-c7d4b74660ce)
+[18:37:40] [Worker-Main-6/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRiZjg5M2ZjNmRlZmFkMjE4Zjc4MzZlZmVmYmU2MzZmMWMyY2MxYmI2NTBjODJmY2NkOTlmMmMxZWU2In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:40] [Worker-Main-6/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRiZjg5M2ZjNmRlZmFkMjE4Zjc4MzZlZmVmYmU2MzZmMWMyY2MxYmI2NTBjODJmY2NkOTlmMmMxZWU2In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:40] [Worker-Main-6/WARN]: Profile contained invalid signature for textures property (profile id: df3aed81-a998-44f3-a5e4-111797b356f3)
+[18:37:42] [Render thread/INFO]: [System] [CHAT] You received 700 ᠅ Mithril Powder from killing a Golden Goblin!
+[18:37:42] [Render thread/INFO]: [System] [CHAT]   +2 Gold Essence
+[18:37:42] [Worker-Main-4/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFlMzg1NWY5NTJjZDRhMDNjMTQ4YTk0NmUzZjgxMmE1OTU1YWQzNWNiY2I1MjYyN2VhNGFjZDQ3ZDMwODEifX19, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:42] [Worker-Main-4/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFlMzg1NWY5NTJjZDRhMDNjMTQ4YTk0NmUzZjgxMmE1OTU1YWQzNWNiY2I1MjYyN2VhNGFjZDQ3ZDMwODEifX19, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:42] [Worker-Main-4/WARN]: Profile contained invalid signature for textures property (profile id: 4115ed7c-4e31-449f-a016-750736d79ef2)
+[18:37:43] [Worker-Main-11/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE2MzE0ZWFjMzQ0MTZjZTEwYWIyMmMyZTFjNGRjYjQ3MmEzZmViOThkNGUwNGQzZmJiYjg1YTlhNDcxYjE4In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:43] [Worker-Main-11/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE2MzE0ZWFjMzQ0MTZjZTEwYWIyMmMyZTFjNGRjYjQ3MmEzZmViOThkNGUwNGQzZmJiYjg1YTlhNDcxYjE4In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:37:43] [Worker-Main-11/WARN]: Profile contained invalid signature for textures property (profile id: 4329c117-0580-46ae-b77f-7b4579df1069)
+[18:37:44] [Render thread/INFO]: [System] [CHAT] You uncovered a treasure chest!
+[18:37:44] [Render thread/WARN]: Requested creation of existing team 'fkt_Goblin '
+[18:37:44] [Render thread/INFO]: [System] [CHAT] A Golden Goblin has spawned!
+[18:37:49] [Render thread/INFO]: [System] [CHAT] [Sacks] +6 items. (Last 6s.)
+[18:37:50] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:37:50] [Render thread/INFO]: [System] [CHAT]   CHEST LOCKPICKED 
+[18:37:50] [Render thread/INFO]: [System] [CHAT] 
+[18:37:50] [Render thread/INFO]: [System] [CHAT]   REWARDS
+[18:37:50] [Render thread/INFO]: [System] [CHAT]     ⸕ Flawed Amber Gemstone
+[18:37:50] [Render thread/INFO]: [System] [CHAT]     ⸕ Rough Amber Gemstone x48
+[18:37:50] [Render thread/INFO]: [System] [CHAT]     Gemstone Powder x132
+[18:37:50] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:37:55] [Render thread/INFO]: [System] [CHAT] You need a tool with a Breaking Power of 7 to mine Amber Gemstone Block! Speak to Fragilis by the entrance to the Crystal Hollows to learn more!
+[18:37:58] [Render thread/INFO]: [System] [CHAT] [210] §a[VIP§6+§a] Tennet_§f: yes
+[18:37:59] [Render thread/INFO]: [System] [CHAT] You uncovered a treasure chest!
+[18:37:59] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:00] [Worker-Main-2/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE2MzE0ZWFjMzQ0MTZjZTEwYWIyMmMyZTFjNGRjYjQ3MmEzZmViOThkNGUwNGQzZmJiYjg1YTlhNDcxYjE4In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:38:00] [Worker-Main-2/ERROR]: Failed to verify signature on property Property[name=textures, value=eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWE2MzE0ZWFjMzQ0MTZjZTEwYWIyMmMyZTFjNGRjYjQ3MmEzZmViOThkNGUwNGQzZmJiYjg1YTlhNDcxYjE4In19fQ==, signature=]
+java.security.SignatureException: Bad signature length: got 0 but was expecting 512
+	at java.base/sun.security.rsa.RSASignature.engineVerify(RSASignature.java:212) ~[?:?]
+	at java.base/java.security.Signature$Delegate.engineVerify(Signature.java:1422) ~[?:?]
+	at java.base/java.security.Signature.verify(Signature.java:790) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilServicesKeyInfo.validateProperty(YggdrasilServicesKeyInfo.java:165) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.lambda$getPropertySignatureState$0(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at java.base/java.util.stream.MatchOps$1MatchSink.accept(MatchOps.java:90) ~[?:?]
+	at java.base/java.util.AbstractList$RandomAccessSpliterator.tryAdvance(AbstractList.java:708) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:129) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:527) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:513) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:230) ~[?:?]
+	at java.base/java.util.stream.MatchOps$MatchOp.evaluateSequential(MatchOps.java:196) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline.noneMatch(ReferencePipeline.java:642) ~[?:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.getPropertySignatureState(YggdrasilMinecraftSessionService.java:185) ~[authlib-7.0.61.jar:?]
+	at knot/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.unpackTextures(YggdrasilMinecraftSessionService.java:128) ~[authlib-7.0.61.jar:?]
+	at knot/net.minecraft.class_1071$1.method_54647(class_1071.java:60) ~[client-intermediary.jar:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) [?:?]
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1760) [?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843) [?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808) [?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188) [?:?]
+[18:38:00] [Worker-Main-2/WARN]: Profile contained invalid signature for textures property (profile id: 04049c90-d3e9-4621-9caf-00000aaa3994)
+[18:38:02] [Render thread/INFO]: [System] [CHAT] [Sacks] +52 items. (Last 12s.)
+[18:38:06] [Render thread/INFO]: [System] [CHAT] [219] §a[VIP] dangerousman15§f: omg
+[18:38:09] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:10] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:12] [Render thread/INFO]: [System] [CHAT] The wind has changed direction!
+[18:38:16] [Render thread/INFO]: [System] [CHAT]  
+[18:38:16] [Render thread/INFO]: [System] [CHAT] §f                 §7You have §3669 §7materials stashed away!
+[18:38:16] [Render thread/INFO]: [System] [CHAT] §f              §8(This totals 2 types of materials stashed!)
+[18:38:16] [Render thread/INFO]: [System] [CHAT] §f                §3§l>>> §3§lCLICK HERE§b to pick them up! §3§l<<<
+[18:38:16] [Render thread/INFO]: [System] [CHAT]   
+[18:38:26] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:29] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:39] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:38:39] [Render thread/INFO]: [System] [CHAT]   CHEST LOCKPICKED 
+[18:38:39] [Render thread/INFO]: [System] [CHAT] 
+[18:38:39] [Render thread/INFO]: [System] [CHAT]   REWARDS
+[18:38:39] [Render thread/INFO]: [System] [CHAT]     Goblin Egg
+[18:38:39] [Render thread/INFO]: [System] [CHAT]     Diamond Essence
+[18:38:39] [Render thread/INFO]: [System] [CHAT]     Gemstone Powder x693
+[18:38:39] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:38:40] [Render thread/INFO]: [System] [CHAT] You uncovered a treasure chest!
+[18:38:42] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:42] [Render thread/INFO]: [System] [CHAT] The wind has changed direction!
+[18:38:44] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:38:44] [Render thread/INFO]: [System] [CHAT]   CHEST LOCKPICKED 
+[18:38:44] [Render thread/INFO]: [System] [CHAT] 
+[18:38:44] [Render thread/INFO]: [System] [CHAT]   REWARDS
+[18:38:44] [Render thread/INFO]: [System] [CHAT]     ⸕ Rough Amber Gemstone x40
+[18:38:44] [Render thread/INFO]: [System] [CHAT]     ❤ Rough Ruby Gemstone x24
+[18:38:44] [Render thread/INFO]: [System] [CHAT]     Gemstone Powder x267
+[18:38:44] [Render thread/INFO]: [System] [CHAT] ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+[18:38:49] [Render thread/INFO]: [System] [CHAT] [Sacks] +65 items. (Last 8s.)
+[18:38:50] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:50] [Render thread/INFO]: [System] [CHAT] Your Armadillo leveled up to level 22!
+[18:38:53] [Render thread/INFO]: [System] [CHAT] You uncovered a treasure chest!
+[18:38:54] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:38:54] [Render thread/WARN]: Requested creation of existing team 'fkt_Weakling '
+[18:39:02] [Render thread/INFO]: [System] [CHAT] [Sacks] +68 items. (Last 10s.)
+[18:39:13] [Render thread/INFO]: [System] [CHAT] The wind has changed direction!
+[18:39:17] [Render thread/INFO]: [System] [CHAT]  
+[18:39:17] [Render thread/INFO]: [System] [CHAT] §f                 §7You have §3669 §7materials stashed away!
+[18:39:17] [Render thread/INFO]: [System] [CHAT] §f              §8(This totals 2 types of materials stashed!)
+[18:39:17] [Render thread/INFO]: [System] [CHAT] §f                §3§l>>> §3§lCLICK HERE§b to pick them up! §3§l<<<
+[18:39:17] [Render thread/INFO]: [System] [CHAT]   
+Fallback (sent messages):
+/hub
+/bz
+/warp dwarve
+/warp dwarven
+/warp dwarven_mines
+/warp dwarf
+/warp mines
+/warpforge
+/hub
+/effects
+/hub
+/warp mines
+/fl
+/ahs golem
+/fl
+/warpforge
+/getfromsacks volta
+/getfromsacks mithril 20
+/garry
+/bz
+/warpforge
+/garry
+/tptodonexpresso
+/warp garden
+/plotteleport barn
+/sax
+/bz
+/hub
+/ahs mining ex
+/bz
+/ahs divan
+/bz
+/is
+/bz
+/warp garden
+/warpforge
+/sax
+/bz tita
+/warpforge
+/bz
+/fl
+/getoffmyface
+/getoffmyface AndyBab
+/bz
+/warpforge
+/ah
+/garry
+/bz
+/ahs scatha
+/bz
+/warpforge
+/bz
+/sax
+/is
+/ahs armadi
+/bz
+/collection
+/bz ruby
+/getfromsacks leather 64
+/recipe small gemstoen
+/recipe small gemst
+/recipe medi gemst
+/recipe medium gem
+/bz ed ruby
+/recipe large gems
+/bz ruby
+/ah
+/warp mines
+/recipe minera
+/bz minera
+/bz gloss
+/ahs minera
+/recipe mineral
+/getfromsacks enchanted_diamond 24
+/bz
+/sax
+/hub
+/warpforge
+/warp mines
+/sax
+/ahs gemstone

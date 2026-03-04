@@ -31,6 +31,7 @@ public class PasunhackConfig {
     public boolean solvePuzzler = true;
     public boolean titaniumTracer = false;
     public int titaniumTracerRadius = 30;
+    public boolean crystalHollowsChestEsp = false;
 
     private static PasunhackConfig instance;
 

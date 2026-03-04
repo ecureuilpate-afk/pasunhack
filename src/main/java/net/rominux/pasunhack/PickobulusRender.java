@@ -24,8 +24,9 @@ public class PickobulusRender {
 
         boolean showWaypoints = PasunhackConfig.getInstance().showCommissionWaypoints;
         boolean showPickobulus = PasunhackConfig.getInstance().showPickobulusPreview;
+        boolean showChestEsp = PasunhackConfig.getInstance().crystalHollowsChestEsp;
 
-        if (!showWaypoints && !showPickobulus)
+        if (!showWaypoints && !showPickobulus && !showChestEsp)
             return;
 
         Camera camera = client.gameRenderer.getCamera();
@@ -54,7 +55,7 @@ public class PickobulusRender {
             }
         }
 
-        if (showWaypoints) {
+        if (showWaypoints && CommissionsOverlay.isInDwarvenMines) {
             net.minecraft.client.font.TextRenderer textRenderer = client.textRenderer;
             net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
                     .getEntityVertexConsumers();
@@ -189,6 +190,36 @@ public class PickobulusRender {
                 immediate.draw();
                 org.lwjgl.opengl.GL11.glEnable(org.lwjgl.opengl.GL11.GL_DEPTH_TEST);
             }
+        }
+
+        if (showChestEsp) {
+            net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
+                    .getEntityVertexConsumers();
+            VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
+
+            int chunkRad = 5;
+            net.minecraft.util.math.ChunkPos playerChunk = client.player.getChunkPos();
+
+            for (int cx = -chunkRad; cx <= chunkRad; cx++) {
+                for (int cz = -chunkRad; cz <= chunkRad; cz++) {
+                    net.minecraft.world.chunk.WorldChunk chunk = client.world.getChunkManager()
+                            .getWorldChunk(playerChunk.x + cx, playerChunk.z + cz);
+                    if (chunk != null) {
+                        for (net.minecraft.block.entity.BlockEntity be : chunk.getBlockEntities().values()) {
+                            if (be instanceof net.minecraft.block.entity.ChestBlockEntity
+                                    || be instanceof net.minecraft.block.entity.TrappedChestBlockEntity) {
+                                BlockPos pos = be.getPos();
+                                Box box = new Box(pos).offset(-camPos.x, -camPos.y, -camPos.z);
+                                drawBox(context.matrices(), lineConsumer, box, 1.0f, 1.0f, 0.0f, 1.0f);
+                            }
+                        }
+                    }
+                }
+            }
+
+            org.lwjgl.opengl.GL11.glDisable(org.lwjgl.opengl.GL11.GL_DEPTH_TEST);
+            immediate.draw();
+            org.lwjgl.opengl.GL11.glEnable(org.lwjgl.opengl.GL11.GL_DEPTH_TEST);
         }
     }
 
