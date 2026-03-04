@@ -177,11 +177,17 @@ public class PickobulusRender {
                 net.minecraft.client.render.VertexConsumerProvider.Immediate immediate = client.getBufferBuilders()
                         .getEntityVertexConsumers();
                 VertexConsumer lineConsumer = immediate.getBuffer(RenderLayer.getLines());
+
                 for (BlockPos pos : titaniumBlocks) {
                     Vec3d target = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                     drawTracer(context.matrices(), lineConsumer, camPos, target, 1f, 1f, 1f, 1f); // White
                 }
+
+                // Bypass GL depth using LWJGL directly to bypass RenderSystem mapping ambiguity
+                // in 1.21
+                org.lwjgl.opengl.GL11.glDisable(org.lwjgl.opengl.GL11.GL_DEPTH_TEST);
                 immediate.draw();
+                org.lwjgl.opengl.GL11.glEnable(org.lwjgl.opengl.GL11.GL_DEPTH_TEST);
             }
         }
     }

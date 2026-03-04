@@ -170,7 +170,6 @@ public class AutoMiner {
                 cancelMining(client);
                 return;
             }
-
             // Maintien actif de l'alignement de la caméra vers le bloc
             Vec3d targetCenter = Vec3d.ofCenter(currentTarget);
             Vec2f angle = getYawPitch(client.player.getEyePos(), targetCenter);
@@ -200,15 +199,14 @@ public class AutoMiner {
 
             // Increment stuck checks to abandon block quicker if it gets stuck
             stuckTicks++;
-            if (stuckTicks > 80) { // 4 seconds stuck aim
+            if (stuckTicks > 40) { // 2 seconds stuck mining max
                 BLACKLIST_TEMP.add(currentTarget);
                 cancelMining(client);
             }
         } else {
-            // Le raycast a échoué. Au lieu de blacklist instantanément, on a un compteur de
-            // tolérance (40 ticks max = 2s)
+            // Le raycast a échoué.
             aimWaitTicks++;
-            if (aimWaitTicks > 40) {
+            if (aimWaitTicks > 10) { // Hyper agressif sur l'échec de ligne de vue
                 BLACKLIST_TEMP.add(currentTarget);
                 cancelMining(client);
             }

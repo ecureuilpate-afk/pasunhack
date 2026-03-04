@@ -122,7 +122,12 @@ public class CommissionsOverlay implements HudRenderCallback {
                         displayLines.add("\u00A7a\u00A7l" + c);
                     } else {
                         String lower = c.toLowerCase();
-                        if (lower.contains("mithril")) {
+                        if (lower.contains("star sentry puncher")) {
+                            displayLines.add("\u00A7c" + c);
+                        } else if (lower.contains("golden goblin slayer") || lower.contains("goblin raid slayer")
+                                || lower.contains("2x mithril powder collector")) {
+                            displayLines.add("\u00A7e" + c);
+                        } else if (lower.contains("mithril")) {
                             displayLines.add("\u00A7b" + c);
                         } else if (!lower.contains("titanium") && !lower.contains("aquamarine") &&
                                 !lower.contains("onyx") && !lower.contains("citrine") &&
