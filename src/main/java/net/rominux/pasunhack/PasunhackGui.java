@@ -179,9 +179,10 @@ public class PasunhackGui extends Screen {
                 context.enableScissor(0, 105, this.width, this.height - 40);
 
                 for (SearchResult res : this.searchResults) {
+                        res.button.setY(110 + (int) this.scrollOffset + (this.searchResults.indexOf(res) * 26));
                         res.button.render(context, mouseX, mouseY, delta);
                         int x = res.button.getX() + 4;
-                        int y = res.button.getY() + 2;
+                        int y = res.button.getY() + 3;
                         context.drawItem(new ItemStack(res.block), x, y);
                 }
 
@@ -189,19 +190,29 @@ public class PasunhackGui extends Screen {
                         int centerX = this.width / 2;
                         int listY = 110 + (int) this.scrollOffset;
                         int index = 0;
-                        for (ButtonWidget btn : this.removeButtons) {
-                                btn.render(context, mouseX, mouseY, delta);
-                        }
-                        for (String blockId : this.config.blocksToMine) {
-                                try {
-                                        Identifier id = Identifier.of(blockId);
-                                        if (Registries.BLOCK.containsId(id)) {
-                                                Block b = Registries.BLOCK.get(id);
-                                                int x = centerX - 100 + 4;
-                                                int y = listY + (index * 24) + 2;
-                                                context.drawItem(new ItemStack(b), x, y);
+                        for (int i = 0; i < this.removeButtons.size(); i += 3) {
+                                int btnY = listY + (index * 26);
+                                ButtonWidget rem = this.removeButtons.get(i);
+                                ButtonWidget up = this.removeButtons.get(i + 1);
+                                ButtonWidget down = this.removeButtons.get(i + 2);
+                                rem.setY(btnY);
+                                up.setY(btnY);
+                                down.setY(btnY);
+                                rem.render(context, mouseX, mouseY, delta);
+                                up.render(context, mouseX, mouseY, delta);
+                                down.render(context, mouseX, mouseY, delta);
+
+                                if (index < this.config.blocksToMine.size()) {
+                                        try {
+                                                Identifier id = Identifier.of(this.config.blocksToMine.get(index));
+                                                if (Registries.BLOCK.containsId(id)) {
+                                                        Block b = Registries.BLOCK.get(id);
+                                                        int x = centerX - 100 + 4;
+                                                        int drawY = btnY + 2;
+                                                        context.drawItem(new ItemStack(b), x, drawY);
+                                                }
+                                        } catch (Exception e) {
                                         }
-                                } catch (Exception e) {
                                 }
                                 index++;
                         }
@@ -212,10 +223,9 @@ public class PasunhackGui extends Screen {
 
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-                this.scrollOffset += verticalAmount * 24;
+                this.scrollOffset += verticalAmount * 26;
                 if (this.scrollOffset > 0)
                         this.scrollOffset = 0;
-                this.updateSearchResults(this.blockInputField.getText());
                 return true;
         }
 
@@ -269,12 +279,12 @@ public class PasunhackGui extends Screen {
                         for (String block : this.config.blocksToMine) {
                                 final String b = block;
                                 final int i = index;
-                                int btnY = listY + (index * 24);
+                                int btnY = listY + (index * 26);
                                 ButtonWidget removeBtn = ButtonWidget
                                                 .builder(Text.literal("\u00A7c[X] \u00A7r" + block), button -> {
                                                         this.config.blocksToMine.remove(b);
                                                         this.init();
-                                                }).dimensions(centerX - 100, btnY, 150, 20).build();
+                                                }).dimensions(centerX - 100, btnY, 150, 24).build();
 
                                 ButtonWidget upBtn = ButtonWidget
                                                 .builder(Text.literal("\u2191"), button -> {
@@ -283,7 +293,7 @@ public class PasunhackGui extends Screen {
                                                                                 i - 1);
                                                                 this.init();
                                                         }
-                                                }).dimensions(centerX + 55, btnY, 20, 20).build();
+                                                }).dimensions(centerX + 55, btnY, 20, 24).build();
 
                                 ButtonWidget downBtn = ButtonWidget
                                                 .builder(Text.literal("\u2193"), button -> {
@@ -292,7 +302,7 @@ public class PasunhackGui extends Screen {
                                                                                 i + 1);
                                                                 this.init();
                                                         }
-                                                }).dimensions(centerX + 80, btnY, 20, 20).build();
+                                                }).dimensions(centerX + 80, btnY, 20, 24).build();
 
                                 this.addSelectableChild(removeBtn);
                                 this.addSelectableChild(upBtn);
@@ -332,11 +342,11 @@ public class PasunhackGui extends Screen {
                                                                                 this.init();
                                                                         }
                                                                 })
-                                                .dimensions(centerX - 100, btnY, 200, 20).build();
+                                                .dimensions(centerX - 100, btnY, 200, 24).build();
 
                                 this.addSelectableChild(btn);
                                 this.searchResults.add(new SearchResult(block, btn));
-                                btnY += 24;
+                                btnY += 26;
                         }
                 }
         }

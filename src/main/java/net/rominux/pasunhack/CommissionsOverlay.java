@@ -122,7 +122,10 @@ public class CommissionsOverlay implements HudRenderCallback {
                         displayLines.add("\u00A7a\u00A7l" + c);
                     } else {
                         String lower = c.toLowerCase();
-                        if (lower.contains("star sentry puncher")) {
+                        if (lower.contains("star sentry puncher") ||
+                                lower.contains("glacite walker") ||
+                                (lower.contains("goblin slayer") && !lower.contains("golden")
+                                        && !lower.contains("raid"))) {
                             displayLines.add("\u00A7c" + c);
                         } else if (lower.contains("golden goblin slayer") || lower.contains("goblin raid slayer")
                                 || lower.contains("2x mithril powder collector")) {
@@ -132,7 +135,7 @@ public class CommissionsOverlay implements HudRenderCallback {
                         } else if (!lower.contains("titanium") && !lower.contains("aquamarine") &&
                                 !lower.contains("onyx") && !lower.contains("citrine") &&
                                 !lower.contains("peridot") && !lower.contains("slayer") &&
-                                !lower.contains("glacite walker") && !lower.contains("ice walker") &&
+                                !lower.contains("ice walker") &&
                                 !lower.contains("goblin")) {
                             displayLines.add("\u00A7e" + c);
                         } else {
@@ -226,8 +229,8 @@ public class CommissionsOverlay implements HudRenderCallback {
                             waypoints.add(new CommissionWaypoint(wpName, -45, 127, 415));
                             waypoints.add(new CommissionWaypoint(wpName, -60, 144, 424));
                             waypoints.add(new CommissionWaypoint(wpName, -54, 132, 410));
-                        } else if (lowerLine.contains("goblin") || lowerLine.contains("goblin slayer")
-                                || lowerLine.contains("goblin burrows")) {
+                        } else if ((lowerLine.contains("goblin") || lowerLine.contains("goblin burrows")) &&
+                                !lowerLine.contains("golden") && !lowerLine.contains("raid")) {
                             waypoints.add(new CommissionWaypoint(wpName, -40, 140, 140));
                         } else if (lowerLine.contains("base camp") || lowerLine.contains("campfire")) {
                             waypoints.add(new CommissionWaypoint(wpName, -7, 126, 229));

@@ -158,8 +158,7 @@ public class PickobulusRender {
                             for (BlockPos bp : BlockPos.iterate(playerPos.add(-radius, -radius, -radius),
                                     playerPos.add(radius, radius, radius))) {
                                 net.minecraft.block.Block block = client.world.getBlockState(bp).getBlock();
-                                if (block == net.minecraft.block.Blocks.POLISHED_DIORITE
-                                        || block == net.minecraft.block.Blocks.END_STONE) {
+                                if (block == net.minecraft.block.Blocks.POLISHED_DIORITE) {
                                     temp.add(bp.toImmutable());
                                 }
                             }
