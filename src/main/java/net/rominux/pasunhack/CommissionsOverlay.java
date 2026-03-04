@@ -102,25 +102,39 @@ public class CommissionsOverlay implements HudRenderCallback {
                 }
             }
 
-            try (java.io.FileWriter writer = new java.io.FileWriter("C:\\Users\\Omain\\Desktop\\meincrac\\log4.txt")) {
-                writer.write("--- FOUND COMMISSIONS ---\n");
-                for (String c : commissionLines) {
-                    writer.write(c + "\n");
-                }
-            } catch (Exception ignored) {
-            }
-
             List<String> displayLines = new ArrayList<>();
             if (!areaName.isEmpty())
                 displayLines.add("\u00A7l" + areaName);
             if (!mithrilPowder.isEmpty())
                 displayLines.add("Mithril: " + mithrilPowder);
-            if (!pickobulusStatus.isEmpty())
-                displayLines.add("Pickobulus: " + pickobulusStatus);
+            if (!pickobulusStatus.isEmpty()) {
+                if (pickobulusStatus.contains("Available")) {
+                    displayLines.add("\u00A7d\u00A7lPickobulus: " + pickobulusStatus);
+                } else {
+                    displayLines.add("Pickobulus: " + pickobulusStatus);
+                }
+            }
             if (!commissionLines.isEmpty()) {
                 displayLines.add(""); // Empty line separator
                 displayLines.add("\u00A7lCommissions");
-                displayLines.addAll(commissionLines);
+                for (String c : commissionLines) {
+                    if (c.endsWith(" DONE")) {
+                        displayLines.add("\u00A7a\u00A7l" + c);
+                    } else {
+                        String lower = c.toLowerCase();
+                        if (lower.contains("mithril")) {
+                            displayLines.add("\u00A7b" + c);
+                        } else if (!lower.contains("titanium") && !lower.contains("aquamarine") &&
+                                !lower.contains("onyx") && !lower.contains("citrine") &&
+                                !lower.contains("peridot") && !lower.contains("slayer") &&
+                                !lower.contains("glacite walker") && !lower.contains("ice walker") &&
+                                !lower.contains("goblin")) {
+                            displayLines.add("\u00A7e" + c);
+                        } else {
+                            displayLines.add(c);
+                        }
+                    }
+                }
             }
 
             if (!displayLines.isEmpty()) {
@@ -141,9 +155,6 @@ public class CommissionsOverlay implements HudRenderCallback {
                         color = 0xFF55FF55; // Light green for area
                     else if (line.equals("\u00A7lCommissions"))
                         color = 0xFFFFAA00; // Orange for Commissions title
-                    else if (line.endsWith(" DONE")) {
-                        line = "\u00A7a\u00A7l" + line;
-                    }
 
                     context.drawTextWithShadow(client.textRenderer, Text.literal(line), 5, y, color);
                     y += 10;
@@ -210,6 +221,9 @@ public class CommissionsOverlay implements HudRenderCallback {
                             waypoints.add(new CommissionWaypoint(wpName, -45, 127, 415));
                             waypoints.add(new CommissionWaypoint(wpName, -60, 144, 424));
                             waypoints.add(new CommissionWaypoint(wpName, -54, 132, 410));
+                        } else if (lowerLine.contains("goblin") || lowerLine.contains("goblin slayer")
+                                || lowerLine.contains("goblin burrows")) {
+                            waypoints.add(new CommissionWaypoint(wpName, -40, 140, 140));
                         } else if (lowerLine.contains("base camp") || lowerLine.contains("campfire")) {
                             waypoints.add(new CommissionWaypoint(wpName, -7, 126, 229));
                         }
@@ -217,10 +231,7 @@ public class CommissionsOverlay implements HudRenderCallback {
                 }
             }
         } catch (Exception e) {
-            try (java.io.FileWriter writer = new java.io.FileWriter("C:\\Users\\Omain\\Desktop\\meincrac\\log5.txt")) {
-                writer.write("Error: " + e.toString() + "\nMessage: " + e.getMessage());
-            } catch (Exception ignored) {
-            }
+            e.printStackTrace();
         }
     }
 }

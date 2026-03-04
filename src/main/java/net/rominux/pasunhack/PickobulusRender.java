@@ -83,7 +83,7 @@ public class PickobulusRender {
 
                 Vec3d waypointVec3d = new Vec3d(wp.x, wp.y, wp.z);
                 double distance = camPos.distanceTo(waypointVec3d);
-                String label = "\u00A7l\u00A7n" + wp.name + "\u00A7r \u00A7a(" + (int) distance + "m)";
+                String label = "\u00A7l" + wp.name + "\u00A7r \u00A7a(" + (int) distance + "m)";
 
                 int textColor = 0xFFFFFFFF; // Blanc par défaut (Titanium ou autre)
                 String lowerName = wp.name.toLowerCase();

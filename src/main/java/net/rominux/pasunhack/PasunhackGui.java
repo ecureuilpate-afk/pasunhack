@@ -317,10 +317,18 @@ public class PasunhackGui extends Screen {
                         // Scoreboard.txt
                         try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "Scoreboard.txt")) {
                                 net.minecraft.scoreboard.Scoreboard sb = this.client.world.getScoreboard();
-                                for (net.minecraft.scoreboard.Team t : sb.getTeams()) {
-                                        fw.write("Team: " + t.getName() + " | Prefix: " + t.getPrefix().getString()
-                                                        + " | Suffix: " + t.getSuffix().getString() + " | Players: "
-                                                        + t.getPlayerList() + "\n");
+                                net.minecraft.scoreboard.ScoreboardObjective obj = sb.getObjectiveForSlot(
+                                                net.minecraft.scoreboard.ScoreboardDisplaySlot.SIDEBAR);
+                                if (obj != null) {
+                                        fw.write("TITRE: " + obj.getDisplayName().getString() + "\n\n");
+                                        for (net.minecraft.scoreboard.ScoreboardEntry entry : sb
+                                                        .getScoreboardEntries(obj)) {
+                                                net.minecraft.scoreboard.Team t = sb.getScoreHolderTeam(entry.owner());
+                                                String prefix = t != null ? t.getPrefix().getString() : "";
+                                                String suffix = t != null ? t.getSuffix().getString() : "";
+                                                String owner = entry.owner().replaceAll("\u00A7.", "");
+                                                fw.write(prefix + owner + suffix + "\n");
+                                        }
                                 }
                         }
 
@@ -336,8 +344,25 @@ public class PasunhackGui extends Screen {
 
                         // ChatHistory.txt
                         try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "ChatHistory.txt")) {
-                                for (String msg : this.client.inGameHud.getChatHud().getMessageHistory()) {
-                                        fw.write(msg + "\n");
+                                try {
+                                        java.lang.reflect.Method m = this.client.inGameHud.getChatHud().getClass()
+                                                        .getDeclaredMethod("getMessages");
+                                        m.setAccessible(true);
+                                        java.util.List<?> msgs = (java.util.List<?>) m
+                                                        .invoke(this.client.inGameHud.getChatHud());
+                                        for (Object msg : msgs) {
+                                                java.lang.reflect.Method contentM = msg.getClass()
+                                                                .getDeclaredMethod("content");
+                                                contentM.setAccessible(true);
+                                                net.minecraft.text.Text text = (net.minecraft.text.Text) contentM
+                                                                .invoke(msg);
+                                                fw.write(text.getString() + "\n");
+                                        }
+                                } catch (Exception e) {
+                                        fw.write("Fallback (sent messages):\n");
+                                        for (String msg : this.client.inGameHud.getChatHud().getMessageHistory()) {
+                                                fw.write(msg + "\n");
+                                        }
                                 }
                         }
 
