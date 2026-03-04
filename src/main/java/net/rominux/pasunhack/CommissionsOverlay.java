@@ -14,6 +14,7 @@ import java.util.List;
 public class CommissionsOverlay implements HudRenderCallback {
     public static final List<CommissionWaypoint> waypoints = new java.util.concurrent.CopyOnWriteArrayList<>();
     public static final List<String> activeCommissions = new java.util.concurrent.CopyOnWriteArrayList<>();
+    public static boolean isPickobulusAvailable = false;
 
     public static class CommissionWaypoint {
         public String name;
@@ -108,11 +109,15 @@ public class CommissionsOverlay implements HudRenderCallback {
             if (!mithrilPowder.isEmpty())
                 displayLines.add("Mithril: " + mithrilPowder);
             if (!pickobulusStatus.isEmpty()) {
-                if (pickobulusStatus.contains("Available")) {
+                if (pickobulusStatus.contains("Available") || pickobulusStatus.contains("Prêt")) {
+                    isPickobulusAvailable = true;
                     displayLines.add("\u00A7d\u00A7lPickobulus: " + pickobulusStatus);
                 } else {
+                    isPickobulusAvailable = false;
                     displayLines.add("Pickobulus: " + pickobulusStatus);
                 }
+            } else {
+                isPickobulusAvailable = false;
             }
             if (!commissionLines.isEmpty()) {
                 displayLines.add(""); // Empty line separator
@@ -238,7 +243,9 @@ public class CommissionsOverlay implements HudRenderCallback {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             e.printStackTrace();
         }
     }

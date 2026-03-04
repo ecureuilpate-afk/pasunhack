@@ -35,7 +35,8 @@ public class PickobulusRender {
                 : client.getBufferBuilders().getEntityVertexConsumers();
 
         Item item = client.player.getMainHandStack().getItem();
-        if (showPickobulus && (item.toString().contains("pickaxe") || item == Items.PRISMARINE_SHARD)) {
+        if (showPickobulus && CommissionsOverlay.isPickobulusAvailable
+                && (item.toString().contains("pickaxe") || item == Items.PRISMARINE_SHARD)) {
             Vec3d start = client.player.getEyePos();
             Vec3d end = start.add(client.player.getRotationVec(1.0f).multiply(20.0));
             HitResult hit = client.world.raycast(new net.minecraft.world.RaycastContext(start, end,

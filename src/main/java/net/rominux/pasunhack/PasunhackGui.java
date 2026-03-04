@@ -188,7 +188,7 @@ public class PasunhackGui extends Screen {
 
                 if (this.blockInputField.getText().isEmpty()) {
                         int centerX = this.width / 2;
-                        int listY = 110 + (int) this.scrollOffset;
+                        int listY = 110;
                         int index = 0;
                         for (int i = 0; i < this.removeButtons.size(); i += 3) {
                                 int btnY = listY + (index * 26);
@@ -198,9 +198,11 @@ public class PasunhackGui extends Screen {
                                 rem.setY(btnY);
                                 up.setY(btnY);
                                 down.setY(btnY);
-                                rem.render(context, mouseX, mouseY, delta);
-                                up.render(context, mouseX, mouseY, delta);
-                                down.render(context, mouseX, mouseY, delta);
+
+                                int mouseScrolledY = mouseY + (int) this.scrollOffset;
+                                rem.render(context, mouseX, mouseScrolledY, delta);
+                                up.render(context, mouseX, mouseScrolledY, delta);
+                                down.render(context, mouseX, mouseScrolledY, delta);
 
                                 if (index < this.config.blocksToMine.size()) {
                                         try {
@@ -223,8 +225,8 @@ public class PasunhackGui extends Screen {
 
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-                this.scrollOffset += verticalAmount * 26;
-                if (this.scrollOffset > 0)
+                this.scrollOffset += verticalAmount * -26;
+                if (this.scrollOffset < 0)
                         this.scrollOffset = 0;
                 return true;
         }
@@ -389,18 +391,44 @@ public class PasunhackGui extends Screen {
                         // ChatHistory.txt
                         try (java.io.FileWriter fw = new java.io.FileWriter(baseDir + "ChatHistory.txt")) {
                                 try {
-                                        java.lang.reflect.Method m = this.client.inGameHud.getChatHud().getClass()
-                                                        .getDeclaredMethod("getMessages");
-                                        m.setAccessible(true);
-                                        java.util.List<?> msgs = (java.util.List<?>) m
-                                                        .invoke(this.client.inGameHud.getChatHud());
-                                        for (Object msg : msgs) {
-                                                java.lang.reflect.Method contentM = msg.getClass()
-                                                                .getDeclaredMethod("content");
-                                                contentM.setAccessible(true);
-                                                net.minecraft.text.Text text = (net.minecraft.text.Text) contentM
-                                                                .invoke(msg);
-                                                fw.write(text.getString() + "\n");
+                                        // Read ChatHud message lines dynamically (received messages)
+                                        java.util.List<?> lines = null;
+                                        try {
+                                                java.lang.reflect.Method m = this.client.inGameHud.getChatHud()
+                                                                .getClass()
+                                                                .getDeclaredMethod("getMessages");
+                                                m.setAccessible(true);
+                                                lines = (java.util.List<?>) m
+                                                                .invoke(this.client.inGameHud.getChatHud());
+                                        } catch (Exception e) {
+                                                // Fallback to latest.log if reflection fails
+                                                java.io.File logFile = new java.io.File(client.runDirectory,
+                                                                "logs/latest.log");
+                                                if (logFile.exists()) {
+                                                        java.util.List<String> fileLines = java.nio.file.Files
+                                                                        .readAllLines(logFile.toPath());
+                                                        int start = Math.max(0, fileLines.size() - 500);
+                                                        for (int i = start; i < fileLines.size(); i++) {
+                                                                fw.write(fileLines.get(i) + "\n");
+                                                        }
+                                                }
+                                                throw e; // To skip to the sent messages fallback if log reading somehow
+                                                         // fails
+                                        }
+
+                                        if (lines != null) {
+                                                for (Object msg : lines) {
+                                                        try {
+                                                                java.lang.reflect.Method contentM = msg.getClass()
+                                                                                .getDeclaredMethod("content");
+                                                                contentM.setAccessible(true);
+                                                                net.minecraft.text.Text text = (net.minecraft.text.Text) contentM
+                                                                                .invoke(msg);
+                                                                fw.write(text.getString() + "\n");
+                                                        } catch (Exception e) {
+                                                                // Not all objects might have content(), just ignore
+                                                        }
+                                                }
                                         }
                                 } catch (Exception e) {
                                         fw.write("Fallback (sent messages):\n");
